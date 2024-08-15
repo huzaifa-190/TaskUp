@@ -7,28 +7,30 @@ import SignUp from "./components/SignUp";
 import TaskInfoModal from "./components/TaskInfoModal";
 
 import { ToDoProvider, useToDoContext } from "./contexts/ToDoContext";
+
+import { ToastContainer, toast } from 'react-toastify';
 function App() {
   const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title:
-        "Edit youtube clips Edit youtube clips Edit youtube clips Edit youtube clips",
-      completed: false,
-    },
-    { id: 2, title: "Gym workout", completed: false },
-    {
-      id: 3,
-      title:
-        "Learn web concepts Learn web concepts Learn web concepts Learn web concepts",
-      completed: false,
-    },
-    {
-      id: 4,
-      title:
-        "Respond emails Respond emails Respond emails Respond emails  Respond emails",
-      completed: true,
-    },
-    { id: 5, title: "Car service", completed: true },
+    // {
+    //   id: 1,
+    //   title:
+    //     "Edit youtube clips Edit youtube clips Edit youtube clips Edit youtube clips",
+    //   completed: false,
+    // },
+    // { id: 2, title: "Gym workout", completed: false },
+    // {
+    //   id: 3,
+    //   title:
+    //     "Learn web concepts Learn web concepts Learn web concepts Learn web concepts",
+    //   completed: false,
+    // },
+    // {
+    //   id: 4,
+    //   title:
+    //     "Respond emails Respond emails Respond emails Respond emails  Respond emails",
+    //   completed: true,
+    // },
+    // { id: 5, title: "Car service", completed: true },
   ]);
 
   // Search query state
@@ -64,6 +66,7 @@ function App() {
   };
 
   useEffect(() => {
+    console.log("Useeffect [] calling ...")
     const todos = JSON.parse(localStorage.getItem("toDos"));
     if (todos && todos.length > 0) {
       setTasks(todos);
@@ -71,11 +74,12 @@ function App() {
   }, []);
 
   // useEffect (()=>{
-  //   localStorage.setItem('toDos', JSON.stringify(tasks));
-  // },[AddTask,UpdateTask,RemoveTask,toggleComplete])
-  useEffect(() => {
-    localStorage.setItem("toDos", JSON.stringify(tasks));
-  }, [tasks]);
+    //   localStorage.setItem('toDos', JSON.stringify(tasks));
+    // },[AddTask,UpdateTask,RemoveTask,toggleComplete])
+  //   useEffect(() => {
+  //   console.log("Useeffect [tasks] calling ...")
+  //   localStorage.setItem("toDos", JSON.stringify(tasks));
+  // }, []);
 
   return (
     <ToDoProvider
@@ -90,6 +94,7 @@ function App() {
     >
       {/* <TaskInfoModal /> */}
       <Home />
+      <ToastContainer />
       {/* <SignUp /> */}
     </ToDoProvider>
   );

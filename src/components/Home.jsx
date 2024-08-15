@@ -1,4 +1,4 @@
-import {React,useState} from "react";
+import { React, useState } from "react";
 
 import { IoIosAddCircle } from "react-icons/io";
 import { MdDarkMode } from "react-icons/md";
@@ -11,15 +11,14 @@ import TaskInfoModal from "./TaskInfoModal";
 import { useToDoContext } from "../contexts/ToDoContext";
 
 function Home() {
-
-  const [addTaskModalVisible, setAddTaskModalVisible] = useState(false)
+  const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
   const { tasks } = useToDoContext();
   const [searchQuery, setSearchQuery] = useState("");
 
-   // Filtered tasks based on search query
-   const filteredTasks = tasks.filter((task) =>
-     task.title.toLowerCase().includes(searchQuery.toLowerCase())
-   );
+  // Filtered tasks based on search query
+  const filteredTasks = tasks.filter((task) =>
+    task.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <div className="flex-col h-screen w-screen items-center justify-center py-4  sm:px-10">
       {/* TOP Header  */}
@@ -45,43 +44,53 @@ function Home() {
         </div>
       </div>
 
-      {/* Search bar div */}
-      <div className="flex items-center justify-center gap-4 mt-12 sm:mt-10 mb-6 w-full ">
+      {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
+      <div className="flex w-full items-center justify-center gap-4 mt-12 sm:mt-10 mb-6">
         <input
           type="text"
           id="searchField"
           placeholder="search for tasks ..."
           value={searchQuery}
-          onChange={(e)=>setSearchQuery(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="searchField"
         />
 
-        <button title="Add new task" onClick={()=>setAddTaskModalVisible(true)} className="btn">
+        <button
+          title="Add new task"
+          onClick={() => setAddTaskModalVisible(true)}
+          className="btn"
+        >
           <IoIosAddCircle size={40} color="#6C69DA" />
         </button>
       </div>
 
       {/* <h1 className="text-4xl ">Manage your Life with us</h1> */}
 
-      {/* Tasks Table Div */}
-      <div className="flex flex-col w-full items-center gap-6 p-4 overflow-auto">
-        {filteredTasks?.map((task) => (
-          <TaskCard task={task} />
-        ))}
+      {/*----------------------------------------------------------------- Tasks Table Div ------------------------------------------------------------ */}
+      {filteredTasks.length == 0 ? (
+        <h1 className="flex w-full h-72 justify-center items-center text-4xl text-black font-bold  ">"NO TASKS "</h1>
+      ) : (
+        <div className="flex flex-col w-full items-center gap-6 p-4 overflow-auto">
+          {filteredTasks?.map((task) => (
+            <TaskCard task={task} />
+          ))}
 
+          <div className=" flex w-full h-40 sm:h-20 items-center justify-evenly">
+            <button title="prev" className="btn">
+              <FaChevronLeft size={28} />
+            </button>
 
-        <div className=" flex w-full h-40 sm:h-20 items-center justify-evenly">
-          <button title="prev" className="btn">
-            <FaChevronLeft size={28} />
-          </button>
-
-          <button title="next" className="btn">
-            <FaChevronRight size={28} />
-          </button>
+            <button title="next" className="btn">
+              <FaChevronRight size={28} />
+            </button>
+          </div>
         </div>
-      </div>
-
-        {addTaskModalVisible ? <div> <TaskInfoModal onClose={()=>setAddTaskModalVisible(false)}/></div> : null }
+      )}
+      {addTaskModalVisible ? (
+        <div>
+          <TaskInfoModal heading="Create Task" view="create" onClose={() => setAddTaskModalVisible(false)} />
+        </div>
+      ) : null}
     </div>
   );
 }

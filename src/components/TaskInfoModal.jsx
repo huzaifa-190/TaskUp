@@ -1,76 +1,195 @@
-import { React, useState } from "react";
-
+import { React, useState,useEffect } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 import { X } from "lucide-react";
 
-import { ToDoContext,useToDoContext } from "../contexts/ToDoContext";
+import { useToDoContext } from "../contexts/ToDoContext";
+
+import {toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const loaderCss = {
+
+  // display: "block",
+  // margin: "0 auto",
+  // borderColor: "",
+};
+
+// ---------------------------------------------------------- MAIN FUNCTION ----------------------------------------------------
+
+function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggColor='',view=''}) {
+  const { tasks, UpdateTask, RemoveTask, toggleComplete, AddTask } =
+    useToDoContext();
+
+  const [title, setTitle] = useState(`${titlee? titlee : ''}`);
+  // const [title, setTitle] = useState(`${id? id : ''}`);
+  const [tag, setTag] = useState(`${tagg ? tagg : ''}`);
+  const [tagColor, setTagColor] = useState(`${taggColor ? taggColor : '#23df20'}`);
+  const [formErrors, setFormErrors] = useState({
+    title: false,
+    tag: false,
+    tagColor: false,
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
 
 
+  // ---------------------------------------------------------------- METHODS ----------------------------------------------------------------
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const newErrors = {
+      title: title.trim() === "",
+      tag: tag.trim() === "",
+      tagColor: tagColor.trim() === "",
+    };
 
-function TaskInfoModal({ onClose }) {
+    setFormErrors(newErrors);
 
-  const { tasks, UpdateTask, RemoveTask, toggleComplete, AddTask } =useToDoContext();
-  const [title, setTitle] = useState("");
-  const [tag, setTag] = useState("");
-  const [tagColor, setTagColor] = useState("#23df20");
+    const hasErrors = Object.values(newErrors).some((error) => error);
 
+    if (!hasErrors) {
+      // Proceed with form submission or your action here
+      console.log("Form submitted:", title, "   ", tag, "   ", tagColor);
+      setIsLoading(true)
+      const task = {
+        id: Date.now(),
+        title: title,
+        completed: false,
+      };
 
-  const onAdd = ()=>{
-    const task =  {
-      id: 6,
-      title:title,
-      completed: false,
+      AddTask(task);
+      setIsLoading(false)
+      onClose();
+      toast("Task added successfully !",{autoClose:1500});
+      
     }
+    else{
+      setIsLoading(false)
+      toast("Failed !",{autoClose:2000});
+      console.log("form errors -> ", formErrors);
+    }
+  };
+  
 
-    AddTask(task)
-  }
+  // useEffect(() => {
+  //   // class added to the body to disable scrolling
+  //   document.body.style.overflow = 'hidden';
 
+  //   // Cleanup function to enable scrolling when modal is closed
+  //   return () => {
+  //     document.body.style.overflow = 'scroll';
+  //   };
+  // }, []);
+
+  {/* ----------------------------------------------------- RETURN ------------------------------------------------------  */}
   return (
-    <div className="flex items-center justify-center  fixed inset-0 bg-black bg-opacity-40 backdrop:blur-md ">
-      <form className="flex flex-col w-[40%] p-8  rounded-3xl bg-white m-20">
-
+    <div
+      className="flex items-center justify-center  fixed inset-0 bg-black bg-opacity-40 backdrop:blur-md "
+      onClick={onClose}
+    >
+      {/* ----------------------------------------------------- FORM ------------------------------------------------------  */}
+      <form className="flex flex-col w-[40%] p-8  rounded-3xl bg-white m-20 "
+        onClick={(e) => e.stopPropagation()} // Prevent click event from closing modal
+      >
         <div className="flex flex-row mb-4 items-center ">
-          <h1 className="text-2xl ml-auto font-bold text-gray-800">New Task</h1>
+          <h1 className="text-2xl ml-auto font-bold text-gray-800">{heading}</h1>
           <button className="btn ml-auto" onClick={onClose}>
             <X color="#6C69DA" size={28} />
           </button>
         </div>
 
+        {/* ----------------------------------------------------- TITLE FIELD ------------------------------------------------------  */}
         <label htmlFor="titleField" className="labels">
-          Title
+          Title*
         </label>
         <input
+          readOnly={view=='readonly'}
+          title={view}
           type="text"
           id="titleField"
-          placeholder="Use more relative one"
+          placeholder="Use a relative title for your task"
           value={title}
           required
-          onChange={(e) => setTitle(e.target.value)}
-          className="modalInputFields w-full"
+          onChange={(e) => {
+            setTitle(e.target.value);
+            setFormErrors({
+              ...formErrors,
+              title: false,
+            });
+          }}
+          className={`modalInputFields w-full textEllipsis 
+            ${formErrors.title ? " requiredField " : ""}`}
         />
+        {formErrors.title && <h1 className="requiredFieldLabel">Field Required</h1>}
 
+        {/* ----------------------------------------------------- TAG FIELD -------------------------------------------------------------  */}
         <label htmlFor="tagField" className="labels">
-          Tag input
+          Tag input*
         </label>
         <input
+          readOnly={view=='readonly'}
+          title={view}
           type="text"
           id="tagField"
-          placeholder="work, study, family etc"
+          placeholder="work, study, home etc"
           value={tag}
           required
-          onChange={(e) => setTag(e.target.value)}
-          className="modalInputFields"
+          onChange={(e) => {
+            setTag(e.target.value);
+            setFormErrors({
+              ...formErrors,
+              tag: false,
+            });
+          }}
+          className={`modalInputFields ${
+            formErrors.tag ? "requiredField" : ""
+          }`}
         />
+        {formErrors.tag && <h1 className="requiredFieldLabel">Field Required</h1>}
 
+
+        {/* ----------------------------------------------------- TAG COLOR FIELD ------------------------------------------------------  */}
         <label htmlFor="tagColor" className="labels">
-          Select tag color{" "}
+          Select tag color*
         </label>
-        <input type="color" id="tagColor" value={tagColor} onChange={(e)=>setTagColor(e.target.value)} />
+        <input
+          type="color"
+          id="tagColor"
+          value={tagColor}
+          disabled={view=='readonly'}
+          onChange={(e) => {
+            setTagColor(e.target.value);
+            setFormErrors({
+              ...formErrors,
+              tag: false,
+            });
+          }}
+          className={`${view=='readonly' ? "cursor-not-allowed" : "cursor-pointer"}`}
+        />
         <h1>{tagColor}</h1>
 
-        <button className="btn w-72 p-4 mt-2 bg-lightPurp rounded-md mx-auto text-white bg-opacity-65" 
-        onClick={()=>onAdd()}>
-          ADD
-        </button>
+        {/* ----------------------------------------------------- SUBMIT BUTTON ------------------------------------------------------  */}
+        {view!='readonly' ? <button
+          className="btn w-72 p-4 mt-2 bg-lightPurp rounded-md mx-auto text-white bg-opacity-65 focus:outline-none"
+          type="submit"
+          onClick={() => handleSubmit(event)}
+        >
+          {isLoading ? (
+            <div className="flex gap-2 items-center justify-center">
+            <span>Adding</span>
+            <ClipLoader
+              color={'white'}
+              loading={isLoading}
+              cssOverride={loaderCss}
+              size={20}
+              aria-label="Adding new task ..."
+              data-testid="loader"
+              />
+              </div>
+          ) : 
+            view=="editable" ? "Save" : "CREATE"
+          }
+        </button> : null
+        }
       </form>
     </div>
   );
