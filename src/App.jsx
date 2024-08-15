@@ -2,38 +2,42 @@ import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import Index from "./components/Index";
+import Home from "./components/Home";
 import SignUp from "./components/SignUp";
+import TaskInfoModal from "./components/TaskInfoModal";
 
 import { ToDoProvider, useToDoContext } from "./contexts/ToDoContext";
 function App() {
   const [tasks, setTasks] = useState([
     {
       id: 1,
-      title: "Edit youtube clips",
+      title:
+        "Edit youtube clips Edit youtube clips Edit youtube clips Edit youtube clips",
       completed: false,
     },
-    {
-      id: 2,
-      title: "Learn web concepts",
-      completed: false,
-    },
+    { id: 2, title: "Gym workout", completed: false },
     {
       id: 3,
-      title: "Respond emails",
-      completed: true,
+      title:
+        "Learn web concepts Learn web concepts Learn web concepts Learn web concepts",
+      completed: false,
     },
     {
       id: 4,
-      title: "Gym workout",
+      title:
+        "Respond emails Respond emails Respond emails Respond emails  Respond emails",
       completed: true,
     },
-    {
-      id: 5,
-      title: "Car service",
-      completed: true,
-    },
+    { id: 5, title: "Car service", completed: true },
   ]);
+
+  // Search query state
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filtered tasks based on search query
+  const filteredTasks = tasks.filter((task) =>
+    task.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const AddTask = (task) => {
     setTasks((prev) => [{ id: Date.now, ...task }, ...prev]);
@@ -47,7 +51,7 @@ function App() {
       prev.map((prevTask) => (prevTask.id === id ? task : prevTask))
     );
   };
-  const toggleComplete = ({ id }) => {
+  const toggleComplete = (id) => {
     // setTasks((prev)=> prev.map(prevTask => prevTask.id === id ? prevTask.completed=!prevTask.completed : prevTask))
 
     setTasks((prev) =>
@@ -70,9 +74,7 @@ function App() {
   //   localStorage.setItem('toDos', JSON.stringify(tasks));
   // },[AddTask,UpdateTask,RemoveTask,toggleComplete])
   useEffect(() => {
-
     localStorage.setItem("toDos", JSON.stringify(tasks));
-
   }, [tasks]);
 
   return (
@@ -86,8 +88,9 @@ function App() {
         toggleComplete,
       }}
     >
-      <Index />
-      <SignUp />
+      {/* <TaskInfoModal /> */}
+      <Home />
+      {/* <SignUp /> */}
     </ToDoProvider>
   );
 }
