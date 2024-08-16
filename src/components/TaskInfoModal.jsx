@@ -1,4 +1,4 @@
-import { React, useState,useEffect } from "react";
+import { React, useState,useEffect, useRef } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { X } from "lucide-react";
 
@@ -31,9 +31,14 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
   });
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const bgRef = useRef()
 
   // ---------------------------------------------------------------- METHODS ----------------------------------------------------------------
+
+  const closeOnBgTap = (e)=>{
+    if(bgRef.current == e.target) onClose()
+
+  }
   const handleSubmit = async () => {
     event.preventDefault();
     const newErrors = {
@@ -66,8 +71,8 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
     }
     else{
       setIsLoading(false)
-      toast("Failed !",{autoClose:2000});
-      console.log("form errors -> ", formErrors);
+      // toast("Failed !",{autoClose:2000});
+      console.log("form errors i.e empty fields -> ", formErrors);
     }
   };
   
@@ -86,16 +91,18 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
   return (
     <div
       className="flex items-center justify-center  fixed inset-0 bg-black bg-opacity-40 backdrop:blur-md "
-      onClick={onClose}
+      // onClick={onClose}
+      onClick={closeOnBgTap}
+      ref={bgRef}
     >
       {/* ----------------------------------------------------- FORM ------------------------------------------------------  */}
-      <form className="flex flex-col w-[40%] p-8  rounded-3xl bg-white m-20 z-50 "
-        onClick={(e) => e.stopPropagation()} // Prevent click event from closing modal
+      <form className="flex flex-col md:w-[40%] 2xl:w-[50%] p-10 sm:p-8  rounded-3xl bg-white m-20 z-10 "
+        // onSubmit={handleSubmit()}
       >
         <div className="flex flex-row mb-4 items-center ">
           <h1 className="text-2xl ml-auto font-bold text-gray-800">{heading}</h1>
           <button className="btn ml-auto" onClick={onClose}>
-            <X color="#6C69DA" size={28} />
+            <X color="red" size={28} />
           </button>
         </div>
 
@@ -172,7 +179,7 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
 
         {/* ----------------------------------------------------- SUBMIT BUTTON ------------------------------------------------------  */}
         {view!='readonly' ? <button
-          className="btn w-72 p-4 mt-2 bg-lightPurp rounded-md mx-auto text-white bg-opacity-65 focus:outline-none"
+          className="btn w-60 lg:w-72 p-4 mt-2 bg-lightPurp rounded-md mx-auto text-white bg-opacity-65 focus:outline-none"
           type="submit"
           onClick={() => handleSubmit()}
         >

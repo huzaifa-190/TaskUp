@@ -13,14 +13,15 @@ function TaskCard({ task }) {
     useToDoContext();
   const [viewTaskModalVisible, setViewTaskModalVisible] = useState(false);
   const [editTaskModalVisible, setEditTaskModalVisible] = useState(false);
-
+  const timee = new Date(2024, 7, 16);
   return (
     <div
-      className={`flex w-full h-16 items-center bg-slate-100  text-black rounded-md shadow-lg `}
+      className={`flex w-full h-16 items-center text-black rounded-md shadow-lg bg-slate-100 
+          `}
     >
       <div
-        className={`flex items-center gap-3 h-full w-[50%] md:w-[35%] px-4 ${
-          task.completed ? "opacity-50 line-through " : "opacity-100"
+        className={`flex items-center gap-3 h-full w-[50%] md:w-[45%] px-4 ${
+          task.completed ? "completedTask" : " bg-slate-100 "
         } `}
       >
         <input
@@ -29,35 +30,38 @@ function TaskCard({ task }) {
           id="isCompletedCheckBox"
           checked={task.completed}
           onChange={() => toggleComplete(task.id)}
-          className=" text-lightPurp h-8"
+          className={`text-lightPurp h-8 `}
           size={28}
         />
         {/* <span>{task.id}</span> */}
-        <span className="textEllipsis">{task.title}</span>
+        {/* <span className="textEllipsis">{new Date().toDateString()}</span> */}
+        <span className="textEllipsis text-sm sm:text-md">{task.title}</span>
       </div>
 
-      <div className="flex items-center justify-end gap-5 h-full w-[65%] px-4 ">
+      <div
+        className={`flex items-center justify-end gap-5 h-full w-[55%] px-4 ${
+          task.completed ? "completedTask" : " bg-slate-100 "
+        } `}
+      >
         {/* <span>{task.completed? "Completed" :'To be done'}</span> */}
-
-        <button
-          //   onClick={() => RemoveTask(task.id)}
-          className="btn"
-          title="remove"
-        >
-          <PiTagChevronFill size={30} color={task.tagColor} />
-          {/* <BiSolidLabel size={30} color="green" /> */}
-        </button>
 
         <button
           onClick={() => RemoveTask(task.id)}
           className="btn"
           title="remove"
         >
-          <MdDelete size={24} color="#4C48B8" />
+          <MdDelete size={24} color="#8f40c4" />
         </button>
 
-        <button className="btn hover:-translate-y-1 " title="Edit" onClick={()=>setEditTaskModalVisible(true)}>
-          <MdEdit size={24} color="#4C48B8" />
+        <button
+          className={`btn hover:-translate-y-1 ${
+            task.completed ? "cursor-not-allowed" : ""
+          } `}
+          title="Edit"
+          disabled={task.completed}
+          onClick={() => setEditTaskModalVisible(true)}
+        >
+          <MdEdit size={24} color="#8f40c4" />
         </button>
         <button
           className="btn"
@@ -66,20 +70,28 @@ function TaskCard({ task }) {
         >
           <SlOptionsVertical size={24} color="#262626" />
         </button>
+        <PiTagChevronFill size={30} color={task.tagColor} />
+        {/* <button
+          //   onClick={() => RemoveTask(task.id)}
+          className="btn"
+          title="remove"
+        >
+        </button> */}
+        {/* <BiSolidLabel size={30} color="green" /> */}
       </div>
 
-    {/* ---------------------------------------------------------------------------------- EDIT TASK MODAL ----------------------------------------------------------------------- */}
+      {/* ---------------------------------------------------------------------------------- EDIT TASK MODAL ----------------------------------------------------------------------- */}
       {editTaskModalVisible ? (
-          <div>
+        <div>
           {/* {" "} */}
           <TaskInfoModal
             heading="Edit Task"
             id={task.id}
             titlee={task.title}
-            tagg='Work'
+            tagg="Work"
             view="editable"
             onClose={() => setEditTaskModalVisible(false)}
-            />
+          />
         </div>
       ) : null}
 

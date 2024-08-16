@@ -7,11 +7,14 @@
   .textEllipsis{
     @apply truncate overflow-hidden whitespace-nowrap text-ellipsis
   }
+  .completedTask{
+    @apply bg-slate-300 bg-opacity-80  line-through  backdrop:blur-md 
+  }
   .requiredField{
     @apply ring-red-500 ring-1 
   }
   .searchField{
-    @apply h-10  w-72 sm:w-[350px] bg-white border-[1px] p-3  focus:outline-0 focus:outline-lightPurp
+    @apply h-10  w-52 sm:w-[350px] bg-white border-[2px] p-3  focus:outline-0 focus:outline-lightPurp
   }
   .btn{
     @apply active:opacity-50 transition-all
