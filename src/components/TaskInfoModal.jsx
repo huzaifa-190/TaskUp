@@ -34,7 +34,7 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
 
 
   // ---------------------------------------------------------------- METHODS ----------------------------------------------------------------
-  const handleSubmit = async (event) => {
+  const handleSubmit = async () => {
     event.preventDefault();
     const newErrors = {
       title: title.trim() === "",
@@ -52,6 +52,8 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
       setIsLoading(true)
       const task = {
         id: Date.now(),
+        tag:tag,
+        tagColor:tagColor,
         title: title,
         completed: false,
       };
@@ -87,7 +89,7 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
       onClick={onClose}
     >
       {/* ----------------------------------------------------- FORM ------------------------------------------------------  */}
-      <form className="flex flex-col w-[40%] p-8  rounded-3xl bg-white m-20 "
+      <form className="flex flex-col w-[40%] p-8  rounded-3xl bg-white m-20 z-50 "
         onClick={(e) => e.stopPropagation()} // Prevent click event from closing modal
       >
         <div className="flex flex-row mb-4 items-center ">
@@ -99,10 +101,11 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
 
         {/* ----------------------------------------------------- TITLE FIELD ------------------------------------------------------  */}
         <label htmlFor="titleField" className="labels">
-          Title*
+          Title *
         </label>
         <input
           readOnly={view=='readonly'}
+          autoFocus={view!='readonly'}
           title={view}
           type="text"
           id="titleField"
@@ -116,14 +119,14 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
               title: false,
             });
           }}
-          className={`modalInputFields w-full textEllipsis 
+          className={`modalInputFields focus w-full textEllipsis 
             ${formErrors.title ? " requiredField " : ""}`}
         />
         {formErrors.title && <h1 className="requiredFieldLabel">Field Required</h1>}
 
         {/* ----------------------------------------------------- TAG FIELD -------------------------------------------------------------  */}
         <label htmlFor="tagField" className="labels">
-          Tag input*
+          Tag *
         </label>
         <input
           readOnly={view=='readonly'}
@@ -149,7 +152,7 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
 
         {/* ----------------------------------------------------- TAG COLOR FIELD ------------------------------------------------------  */}
         <label htmlFor="tagColor" className="labels">
-          Select tag color*
+          {view=='create' && "Select"} Tag color *
         </label>
         <input
           type="color"
@@ -171,7 +174,7 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
         {view!='readonly' ? <button
           className="btn w-72 p-4 mt-2 bg-lightPurp rounded-md mx-auto text-white bg-opacity-65 focus:outline-none"
           type="submit"
-          onClick={() => handleSubmit(event)}
+          onClick={() => handleSubmit()}
         >
           {isLoading ? (
             <div className="flex gap-2 items-center justify-center">

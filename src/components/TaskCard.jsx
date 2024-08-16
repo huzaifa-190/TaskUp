@@ -44,7 +44,7 @@ function TaskCard({ task }) {
           className="btn"
           title="remove"
         >
-          <PiTagChevronFill size={30} color="green" />
+          <PiTagChevronFill size={30} color={task.tagColor} />
           {/* <BiSolidLabel size={30} color="green" /> */}
         </button>
 
@@ -91,6 +91,7 @@ function TaskCard({ task }) {
             heading="Task Info"
             id={Date.now}
             titlee={task.title}
+            tagg={task.tag}
             view="readonly"
             onClose={() => setViewTaskModalVisible(false)}
           />
