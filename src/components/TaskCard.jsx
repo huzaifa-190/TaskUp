@@ -15,6 +15,13 @@ function TaskCard({ task }) {
   const [viewTaskModalVisible, setViewTaskModalVisible] = useState(false);
   const [editTaskModalVisible, setEditTaskModalVisible] = useState(false);
   const timee = new Date(2024, 7, 16);
+
+  const onEdit = ()=>{
+    // fetchTask()
+    setEditTaskModalVisible(true)
+  }
+
+
   return (
     <div
       className={`flex w-full h-16 items-center text-black rounded-md shadow-lg bg-slate-100 
@@ -34,9 +41,7 @@ function TaskCard({ task }) {
           className={`text-lightPurp h-8 `}
           size={28}
         />
-        {/* <span>{task.id}</span> */}
         {/* <span className="textEllipsis">{new Date().toDateString()}</span> */}
-        <span>{import.meta.env.VITE_FIREBASE_PROJECT_ID}</span>
 
         <span className={`textEllipsis text-sm sm:text-md  ${task.completed ? "opacity-80" : " bg-slate-100 "}  `}>{task.title}</span>
       </div>
@@ -49,7 +54,7 @@ function TaskCard({ task }) {
         {/* <span>{task.completed? "Completed" :'To be done'}</span> */}
 
         <button
-          onClick={() => RemoveTask(task.id)}
+          onClick={() => RemoveTask({id:task.id,docName:"Tasks"})}
           className={`btn `}
           title="remove"
         >
@@ -63,7 +68,7 @@ function TaskCard({ task }) {
           } `}
           title="Edit"
           disabled={task.completed}
-          onClick={() => setEditTaskModalVisible(true)}
+          onClick={() => onEdit()}
         >
           <MdEdit size={24} color="#8f40c4" />
         </button>
@@ -90,8 +95,7 @@ function TaskCard({ task }) {
           <TaskInfoModal
             heading="Edit Task"
             id={task.id}
-            titlee={task.title}
-            tagg="Work"
+            task={task}
             view="editable"
             onClose={() => setEditTaskModalVisible(false)}
           />
@@ -104,9 +108,8 @@ function TaskCard({ task }) {
           {/* {" "} */}
           <TaskInfoModal
             heading="Task Info"
-            id={Date.now}
-            titlee={task.title}
-            tagg={task.tag}
+            // id={task.id}
+            task={task}
             view="readonly"
             onClose={() => setViewTaskModalVisible(false)}
           />

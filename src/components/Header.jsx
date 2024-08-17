@@ -10,10 +10,10 @@ export default function Header() {
       className="flex items-center gap-1 btn"
       onClick={() => location.reload()}
     >
-      <h1 className="flex items-center justify-center h-8 w-8 sm:h-12 sm:w-12 p-4 rounded-full text-lightPurp border-lightPurp border-2 sm:text-2xl font-bold">
-        To
+      <h1 className="flex items-center justify-center h-8 w-8 sm:h-12 sm:w-12 p-4 rounded-full bg-lightPurp text-white border-lightPurp border-2 sm:text-lg font-bold">
+        Task
       </h1>
-      <h1 className="text-xl font-bold">Do</h1>
+      <h1 className="text-xl font-bold">Up</h1>
     </button>
 
     {/* Right Div in Header containing email and avatar */}

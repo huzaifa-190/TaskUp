@@ -7,8 +7,8 @@ import SignUp from "./components/SignUp";
 import TaskInfoModal from "./components/TaskInfoModal";
 import { ToastContainer, toast } from "react-toastify";
 
-import { getDatabase, ref, set, push, get ,onValue} from 'firebase/database';
-import app from './DataBase/FirebaseConfig';
+import { getDatabase, ref, set, push, get, onValue } from "firebase/database";
+import app from "./DataBase/FirebaseConfig";
 
 const db = getDatabase(app);
 
@@ -16,22 +16,26 @@ import { ToDoProvider, useToDoContext } from "./contexts/ToDoContext";
 import useFirebaseDatabase from "./Hooks/FirebaseHooks";
 
 function App() {
- 
-  const { writeData,tasks,setTasks,fetchingData,writingData } = useFirebaseDatabase()
+  const { upDateDoc,deleteDoc, writeData, tasks, setTasks, fetchingData, writingData } =
+    useFirebaseDatabase();
 
   const AddTask = async (task) => {
     // setTasks((prev) => [{ id: Date.now, ...task }, ...prev]);
     await writeData(task);
-    toast("Task added successfully !", { autoClose: 1500 });
+    // toast("Task added successfully !", { autoClose: 1500 });
   };
-  const RemoveTask = (id) => {
+
+  const RemoveTask = ({id,docName}) => {
     console.log("Removing task ...");
-    setTasks((prev) => prev.filter((prevTask) => prevTask.id !== id));
+    // setTasks((prev) => prev.filter((prevTask) => prevTask.id !== id));
+    deleteDoc(id,docName)
   };
-  const UpdateTask = ({ id, task }) => {
-    setTasks((prev) =>
-      prev.map((prevTask) => (prevTask.id === id ? task : prevTask))
-    );
+
+  const UpdateTask = ({ id, docName, task }) => {
+    // setTasks((prev) =>
+    //   prev.map((prevTask) => (prevTask.id === id ? task : prevTask))
+    // );
+    upDateDoc(id, docName, task);
   };
   const toggleComplete = (id) => {
     // setTasks((prev)=> prev.map(prevTask => prevTask.id === id ? prevTask.completed=!prevTask.completed : prevTask))
@@ -45,14 +49,9 @@ function App() {
     );
   };
 
-  useEffect(() => {
-   
-   
-  }, []);
+  useEffect(() => {}, []);
 
   useEffect(() => {
-   
-   
     // localStorage.setItem("toDos", JSON.stringify(tasks));
   }, []);
 
@@ -66,7 +65,7 @@ function App() {
         RemoveTask,
         toggleComplete,
         fetchingData,
-        writingData
+        writingData,
       }}
     >
       {/* <TaskInfoModal /> */}

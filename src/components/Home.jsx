@@ -9,6 +9,7 @@ import TaskCard from "./TaskCard";
 import TaskInfoModal from "./TaskInfoModal";
 import FilterDropDown from "./FilterDropDown";
 import Header from "./Header";
+import NoInernet from "./NoInernet";
 import TasksLoader from "./TasksLoader";
 
 import { useToDoContext } from "../contexts/ToDoContext";
@@ -80,11 +81,11 @@ function Home() {
       {/*----------------------------------------------------------------- Tasks Table Div ------------------------------------------------------------ */}
       {fetchingData ? (
         <TasksLoader/>
-      ) : filteredTasks.length == 0 ? (
+      ) : !navigator.onLine ? <NoInernet/> : filteredTasks.length == 0 ?
         <h1 className="flex w-full h-72 justify-center items-center text-4xl text-black font-bold  ">
-          "NO TASKS"
+          " No Tasks "
         </h1>
-      ) : (
+       : (
         <div className="flex flex-col w-full items-center gap-6 p-4 overflow-auto">
           {tasks?.map((task) => (
             <TaskCard task={task} />
