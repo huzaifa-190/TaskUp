@@ -9,6 +9,7 @@ import { useToDoContext } from "../contexts/ToDoContext";
 import TaskInfoModal from "./TaskInfoModal";
 
 function TaskCard({ task }) {
+  // const apiKey = 
   const { tasks, UpdateTask, RemoveTask, toggleComplete, AddTask } =
     useToDoContext();
   const [viewTaskModalVisible, setViewTaskModalVisible] = useState(false);
@@ -35,7 +36,9 @@ function TaskCard({ task }) {
         />
         {/* <span>{task.id}</span> */}
         {/* <span className="textEllipsis">{new Date().toDateString()}</span> */}
-        <span className="textEllipsis text-sm sm:text-md">{task.title}</span>
+        <span>{import.meta.env.VITE_FIREBASE_PROJECT_ID}</span>
+
+        <span className={`textEllipsis text-sm sm:text-md  ${task.completed ? "opacity-80" : " bg-slate-100 "}  `}>{task.title}</span>
       </div>
 
       <div
@@ -47,15 +50,16 @@ function TaskCard({ task }) {
 
         <button
           onClick={() => RemoveTask(task.id)}
-          className="btn"
+          className={`btn `}
           title="remove"
         >
+          
           <MdDelete size={24} color="#8f40c4" />
         </button>
 
         <button
           className={`btn hover:-translate-y-1 ${
-            task.completed ? "cursor-not-allowed" : ""
+            task.completed ? "cursor-not-allowed " : ""
           } `}
           title="Edit"
           disabled={task.completed}
@@ -64,8 +68,7 @@ function TaskCard({ task }) {
           <MdEdit size={24} color="#8f40c4" />
         </button>
         <button
-          className="btn"
-          title="Info"
+          className={`btn`}        title="Info"
           onClick={() => setViewTaskModalVisible(true)}
         >
           <SlOptionsVertical size={24} color="#262626" />

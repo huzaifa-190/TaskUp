@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 
 import { IoIosAddCircle } from "react-icons/io";
-import { MdDarkMode } from "react-icons/md";
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa6";
 import { IoFilter } from "react-icons/io5";
@@ -9,65 +8,50 @@ import { IoFilter } from "react-icons/io5";
 import TaskCard from "./TaskCard";
 import TaskInfoModal from "./TaskInfoModal";
 import FilterDropDown from "./FilterDropDown";
+import Header from "./Header";
+import TasksLoader from "./TasksLoader";
 
 import { useToDoContext } from "../contexts/ToDoContext";
 
 function Home() {
+  const { tasks, fetchingData } = useToDoContext();
   const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
-  const { tasks } = useToDoContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentFilterTag, setCurrentFilterTag] = useState("All");
 
-
   // Filtered tasks based on search query
-  const filteredTasks = tasks?.filter(
-    (task) =>{
-      if(currentFilterTag?.toLowerCase() == 'all'){
-        return task.title.toLowerCase().includes(searchQuery.toLowerCase())
-      }
-      else if(currentFilterTag?.toLowerCase() == 'pending'){
-        return task.title.toLowerCase().includes(searchQuery.toLowerCase()) && (!task.completed )
-      }
-      else if(currentFilterTag?.toLowerCase() == 'done'){
-        return task.title.toLowerCase().includes(searchQuery.toLowerCase()) && (task.completed )
-      }
-      else{
-        return task.title.toLowerCase().includes(searchQuery.toLowerCase()) && currentFilterTag?.toLowerCase() == task?.tag?.toLowerCase()
-      }
+  const filteredTasks = tasks?.filter((task) => {
+    if (currentFilterTag?.toLowerCase() == "all") {
+      return task.title.toLowerCase().includes(searchQuery.toLowerCase());
+    } else if (currentFilterTag?.toLowerCase() == "pending") {
+      return (
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !task.completed
+      );
+    } else if (currentFilterTag?.toLowerCase() == "done") {
+      return (
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        task.completed
+      );
+    } else {
+      return (
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        currentFilterTag?.toLowerCase() == task?.tag?.toLowerCase()
+      );
     }
-    )
-      // task.tagColor == "#11fd0d"
+  });
+  // task.tagColor == "#11fd0d"
   // );
+
   return (
     <div className="flex-col h-screen w-screen items-center justify-center py-4 px-4 sm:px-10">
       {/* TOP Header  */}
-      <div className="flex h-24 w-ful px-4">
-        {/* Left Div in Header containing Logo */}
-        <button
-          className="flex items-center gap-1 btn"
-          onClick={() => location.reload()}
-        >
-          <h1 className="flex items-center justify-center h-8 w-8 sm:h-12 sm:w-12 p-4 rounded-full text-lightPurp border-lightPurp border-2 sm:text-2xl font-bold">
-            To
-          </h1>
-          <h1 className="text-xl font-bold">Do</h1>
-        </button>
-
-        {/* Right Div in Header containing email and avatar */}
-        <div className="flex ml-auto items-center justify-end px-4 gap-5 sm:gap-8">
-          <h2 className="sm:text-xl text-black">huzaifa190@gmail.com</h2>
-          <button className="btn">
-            <MdDarkMode size={28} title="dark mode" />
-          </button>
-          {/* <MdOutlineLightMode size={28} title="light mode" /> */}
-        </div>
-      </div>
-
+      <Header/>
       {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
       <div className="flex items-center justify-center gap-4 mt-12 sm:mt-10 mb-6 px-4">
         <button className="btn mr-auto ">
           <FilterDropDown
-            tagOptions={["Work", "Family", "Personal","Pending","Done"]}
+            tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
             selectedTag={currentFilterTag}
             onTagChange={(value) => setCurrentFilterTag(value)}
           />
@@ -92,17 +76,17 @@ function Home() {
           </button>
         </div>
       </div>
-
       {/* <h1 className="text-4xl ">Manage your Life with us</h1> */}
-
       {/*----------------------------------------------------------------- Tasks Table Div ------------------------------------------------------------ */}
-      {filteredTasks.length == 0 ? (
+      {fetchingData ? (
+        <TasksLoader/>
+      ) : filteredTasks.length == 0 ? (
         <h1 className="flex w-full h-72 justify-center items-center text-4xl text-black font-bold  ">
           "NO TASKS"
         </h1>
       ) : (
         <div className="flex flex-col w-full items-center gap-6 p-4 overflow-auto">
-          {filteredTasks?.map((task) => (
+          {tasks?.map((task) => (
             <TaskCard task={task} />
           ))}
 
@@ -117,6 +101,7 @@ function Home() {
           </div>
         </div>
       )}
+      
       {addTaskModalVisible ? (
         <div>
           <TaskInfoModal

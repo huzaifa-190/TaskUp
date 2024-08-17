@@ -17,7 +17,8 @@ const loaderCss = {
 // ---------------------------------------------------------- MAIN FUNCTION ----------------------------------------------------
 
 function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggColor='',view=''}) {
-  const { tasks, UpdateTask, RemoveTask, toggleComplete, AddTask } =
+
+  const { tasks, UpdateTask, RemoveTask, toggleComplete, AddTask,writingData } =
     useToDoContext();
 
   const [title, setTitle] = useState(`${titlee? titlee : ''}`);
@@ -30,7 +31,7 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
     tagColor: false,
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const bgRef = useRef()
 
   // ---------------------------------------------------------------- METHODS ----------------------------------------------------------------
@@ -54,7 +55,7 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
     if (!hasErrors) {
       // Proceed with form submission or your action here
       console.log("Form submitted:", title, "   ", tag, "   ", tagColor);
-      setIsLoading(true)
+      // setIsLoading(true)
       const task = {
         id: Date.now(),
         tag:tag,
@@ -64,13 +65,13 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
       };
 
       AddTask(task);
-      setIsLoading(false)
+      // setIsLoading(false)
       onClose();
-      toast("Task added successfully !",{autoClose:1500});
+      // toast("Task added successfully !",{autoClose:1500});
       
     }
     else{
-      setIsLoading(false)
+      // setIsLoading(false)
       // toast("Failed !",{autoClose:2000});
       console.log("form errors i.e empty fields -> ", formErrors);
     }
@@ -183,12 +184,12 @@ function TaskInfoModal({ heading='Task',onClose ,id='',titlee='',tagg='',taggCol
           type="submit"
           onClick={() => handleSubmit()}
         >
-          {isLoading ? (
+          {writingData ? (
             <div className="flex gap-2 items-center justify-center">
             <span>Adding</span>
             <ClipLoader
               color={'white'}
-              loading={isLoading}
+              // loading={isLoading}
               cssOverride={loaderCss}
               size={20}
               aria-label="Adding new task ..."
