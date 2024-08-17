@@ -1,32 +1,33 @@
 import { React, useState } from "react";
 
-import { MdEdit, MdDelete, MdOpacity } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
 import { PiTagChevronFill } from "react-icons/pi";
-import { BiSolidLabel } from "react-icons/bi";
 
 import { useToDoContext } from "../contexts/ToDoContext";
 import TaskInfoModal from "./TaskInfoModal";
 
+// ------------------------------------------------------------------------------ MAIN FUNCTION ----------------------------------------------------------------
+// ------------------------------------------------------------------------------ MAIN FUNCTION ----------------------------------------------------------------
 function TaskCard({ task }) {
-  // const apiKey = 
   const { tasks, UpdateTask, RemoveTask, toggleComplete, AddTask } =
     useToDoContext();
   const [viewTaskModalVisible, setViewTaskModalVisible] = useState(false);
   const [editTaskModalVisible, setEditTaskModalVisible] = useState(false);
   const timee = new Date(2024, 7, 16);
 
-  const onEdit = ()=>{
-    // fetchTask()
-    setEditTaskModalVisible(true)
-  }
+  const onEdit = () => {
+    setEditTaskModalVisible(true);
+  };
 
-
+  // ---------------------------------------------------------------- RETURN ----------------------------------------------------------------
   return (
     <div
+      key={task.id}
       className={`flex w-full h-16 items-center text-black rounded-md shadow-lg bg-slate-100 
-          `}
+    `}
     >
+      {/* // ----------------------------------------------------------------------------- LEFT BOX FOR CHECK-BOX & TITLE -------------------------------------------------------------------  */}
       <div
         className={`flex items-center gap-3 h-full w-[50%] md:w-[45%] px-4 ${
           task.completed ? "completedTask" : " bg-slate-100 "
@@ -37,29 +38,33 @@ function TaskCard({ task }) {
           name="isCompleted"
           id="isCompletedCheckBox"
           checked={task.completed}
-          onChange={() => toggleComplete(task.id)}
+          onChange={() => toggleComplete({id:task.id,docName:"Tasks",task})}
           className={`text-lightPurp h-8 `}
           size={28}
         />
-        {/* <span className="textEllipsis">{new Date().toDateString()}</span> */}
 
-        <span className={`textEllipsis text-sm sm:text-md  ${task.completed ? "opacity-80" : " bg-slate-100 "}  `}>{task.title}</span>
+        <button
+          onClick={() => setViewTaskModalVisible(true)}
+          className={`btn textEllipsis text-sm sm:text-md  ${
+            task.completed ? "opacity-80" : " bg-slate-100 "
+          }  `}
+        >
+          {task.title}
+        </button>
       </div>
 
+      {/* ----------------------------------------------------------------------------------  RIGHT BOX FOR OPTIONS ----------------------------------------------------------------------- */}
       <div
-        className={`flex items-center justify-end gap-5 h-full w-[55%] px-4 ${
+        className={`flex items-center justify-end gap-2 sm:gap-5 h-full w-[55%] px-4 ${
           task.completed ? "completedTask" : " bg-slate-100 "
         } `}
       >
-        {/* <span>{task.completed? "Completed" :'To be done'}</span> */}
-
         <button
-          onClick={() => RemoveTask({id:task.id,docName:"Tasks"})}
+          onClick={() => RemoveTask({ id: task.id, docName: "Tasks" })}
           className={`btn `}
           title="remove"
         >
-          
-          <MdDelete size={24} color="#8f40c4" />
+          <MdDelete size={20} className="sm:size-6"  color="#8f40c4" />
         </button>
 
         <button
@@ -70,22 +75,16 @@ function TaskCard({ task }) {
           disabled={task.completed}
           onClick={() => onEdit()}
         >
-          <MdEdit size={24} color="#8f40c4" />
+          <MdEdit size={20} className="sm:size-6"  color="#8f40c4" />
         </button>
         <button
-          className={`btn`}        title="Info"
+          className={`btn`}
+          title="Info"
           onClick={() => setViewTaskModalVisible(true)}
         >
-          <SlOptionsVertical size={24} color="#262626" />
+          <SlOptionsVertical size={20} className="sm:size-6"  color="#262626" />
         </button>
-        <PiTagChevronFill size={30} color={task.tagColor} />
-        {/* <button
-          //   onClick={() => RemoveTask(task.id)}
-          className="btn"
-          title="remove"
-        >
-        </button> */}
-        {/* <BiSolidLabel size={30} color="green" /> */}
+        <PiTagChevronFill size={25} className="sm:size-8"  color={task.tagColor} />
       </div>
 
       {/* ---------------------------------------------------------------------------------- EDIT TASK MODAL ----------------------------------------------------------------------- */}

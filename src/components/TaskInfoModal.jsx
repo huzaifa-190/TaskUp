@@ -34,9 +34,9 @@ function TaskInfoModal({
     writingData,
   } = useToDoContext();
 
-  const [title, setTitle] = useState(task && task.title);
+  const [title, setTitle] = useState(task && task.title || '');
   // const [title, setTitle] = useState(`${id? id : ''}`);
-  const [tag, setTag] = useState(task && task.tag);
+  const [tag, setTag] = useState(task && task.tag || '');
   const [tagColor, setTagColor] = useState(
     (task && task.tagColor) || "#62ff1f"
   );
@@ -70,8 +70,6 @@ function TaskInfoModal({
     const hasErrors = Object.values(newErrors).some((error) => error);
 
     if (!hasErrors) {
-      // Proceed with form submission or your action here
-
       if (navigator.onLine) {
         const task = {
           tag: tag,
@@ -79,21 +77,19 @@ function TaskInfoModal({
           title: title,
           completed: false,
         };
-        console.log("Task to be written after updating ==> ", task);
-
-        // ************************************************ IF View is create , So It should call AddTask method to create a new task
+        
+        // ************************************************ IF View prop = create , So It should call AddTask method to create a new task
         if (view.toLowerCase() == "create") {
           AddTask(task);
           console.log("Form submitted:", title, "   ", tag, "   ", tagColor);
           onClose();
-          setIsLoading(false);
-          toast("Task added successfully !", { autoClose: 1500 });
+          toast.success("Task created ",{autoClose:1000});
+          
         } else {
-          // *************************If view id not create it will be editable so submiting form for updating
+          // *************************If view prop is editable then submiting form for updating
+          // console.log("Task to be written after updating ==> ", task);
           UpdateTask({ id, docName: "Tasks", task });
           onClose();
-          setIsLoading(false);
-          toast("Task added successfully !", { autoClose: 1500 });
         }
       } else {
         toast("Chek your internet");
@@ -105,33 +101,23 @@ function TaskInfoModal({
     }
   };
 
-  // useEffect(() => {
-  //   // class added to the body to disable scrolling
-  //   document.body.style.overflow = 'hidden';
-
-  //   // Cleanup function to enable scrolling when modal is closed
-  //   return () => {
-  //     document.body.style.overflow = 'scroll';
-  //   };
-  // }, []);
-
   {
     /* ----------------------------------------------------- RETURN ------------------------------------------------------  */
   }
   return (
     <div
-      className="flex items-center justify-center  fixed inset-0 bg-black bg-opacity-40 backdrop:blur-md "
+      className="flex w-screen h-screen items-center justify-center  fixed inset-0 bg-black bg-opacity-40 backdrop:blur-md "
       // onClick={onClose}
       onClick={closeOnBgTap}
       ref={bgRef}
     >
-      {/* ----------------------------------------------------- FORM ------------------------------------------------------  */}
+      {/* ----------------------------------------------------- MODAL FORM ------------------------------------------------------  */}
       <form
-        className="flex flex-col md:w-[40%] 2xl:w-[50%] p-10 sm:p-8  rounded-3xl bg-white m-20 z-10 "
+        className="flex flex-col w-[80%]  sm:w-[70%] md:w-[60%] lg:w-[50%]  p-8 sm:p-8  rounded-3xl bg-white z-10 "
         // onSubmit={handleSubmit()}
       >
         <div className="flex flex-row mb-4 items-center ">
-          <h1 className="text-2xl ml-auto font-bold text-gray-800">
+          <h1 className="text-xl sm:text-2xl ml-auto font-bold text-gray-800">
             {heading}
           </h1>
           <button className="btn ml-auto" onClick={onClose}>
@@ -140,7 +126,6 @@ function TaskInfoModal({
         </div>
 
         {/* ----------------------------------------------------- TITLE FIELD ------------------------------------------------------  */}
-        <h1>{id}</h1>
         <label htmlFor="titleField" className="labels">
           Title *
         </label>
@@ -211,7 +196,9 @@ function TaskInfoModal({
             });
           }}
           className={`${
-            view.toLowerCase() == "readonly" ? "cursor-not-allowed" : "cursor-pointer"
+            view.toLowerCase() == "readonly"
+              ? "cursor-not-allowed"
+              : "cursor-pointer"
           }`}
         />
         <h1>{tagColor}</h1>
@@ -219,13 +206,15 @@ function TaskInfoModal({
         {/* ----------------------------------------------------- SUBMIT BUTTON ------------------------------------------------------  */}
         {view.toLowerCase() != "readonly" ? (
           <button
-            className="btn w-60 lg:w-72 p-4 mt-2 bg-lightPurp opacity-90 rounded-md mx-auto text-white bg-opacity-65 focus:outline-none"
+            className="btn w-52 sm:w-60 lg:w-72 p-4 mt-2 text-white  bg-lightPurp opacity-90 rounded-md mx-auto bg-opacity-65 focus:outline-none"
             type="submit"
             onClick={() => handleSubmit()}
           >
             {writingData ? (
-              <div className="flex gap-2 items-center justify-center  text-lg">
-                <span className="text-lg">{view.toLowerCase() == 'create' ? 'Adding' : 'Saving'}</span>
+              <div className="flex gap-2 items-center justify-center  sm:text-lg">
+                <span className="sm:text-lg">
+                  {view.toLowerCase() == "create" ? "Adding" : "Saving"}
+                </span>
                 <ClipLoader
                   color={"white"}
                   // loading={isLoading}

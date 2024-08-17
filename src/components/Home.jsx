@@ -26,18 +26,16 @@ function Home() {
       return task.title.toLowerCase().includes(searchQuery.toLowerCase());
     } else if (currentFilterTag?.toLowerCase() == "pending") {
       return (
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !task.completed
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) && !task.completed
       );
     } else if (currentFilterTag?.toLowerCase() == "done") {
       return (
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        task.completed
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) && task.completed
       );
     } else {
+      console.log("Filtering Tasks ...",task)
       return (
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        currentFilterTag?.toLowerCase() == task?.tag?.toLowerCase()
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) && currentFilterTag?.toLowerCase() == task?.tag?.toLowerCase()
       );
     }
   });
@@ -47,10 +45,15 @@ function Home() {
   return (
     <div className="flex-col h-screen w-screen items-center justify-center py-4 px-4 sm:px-10">
       {/* TOP Header  */}
-      <Header/>
+      <Header />
+      {/* Email Heading For Smaller Screen Sizes */}
+      <div className="hidden sm:hidden w-full items-center justify-end gap-4 px-4">
+        <h2 className="sm:text-xl font-mono text-gray-600">huzaifa190@gmail.com</h2>
+      </div>      
       {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
-      <div className="flex items-center justify-center gap-4 mt-12 sm:mt-10 mb-6 px-4">
-        <button className="btn mr-auto ">
+      <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4">
+        {/* FILTER DROPDOWN FOR >= LG-Screen SIZES*/}
+        <button className="btn mr-auto hidden sm:flex">
           <FilterDropDown
             tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
             selectedTag={currentFilterTag}
@@ -58,7 +61,7 @@ function Home() {
           />
         </button>
 
-        <div className="mr-auto flex w-full justify-center items-center gap-4">
+        <div className="sm:mr-auto flex w-full justify-center items-center gap-4">
           <input
             type="text"
             id="searchField"
@@ -77,21 +80,33 @@ function Home() {
           </button>
         </div>
       </div>
-      {/* <h1 className="text-4xl ">Manage your Life with us</h1> */}
+
+      {/*----------------------------------------------------------------- FILTER DROP-DOWN Div FOR SM-Screen SIZES------------------------------------------------------------ */}
+      <button className="btn flex sm:hidden px-4">
+        <FilterDropDown
+          tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
+          selectedTag={currentFilterTag}
+          onTagChange={(value) => setCurrentFilterTag(value)}
+        />
+      </button>
       {/*----------------------------------------------------------------- Tasks Table Div ------------------------------------------------------------ */}
       {fetchingData ? (
-        <TasksLoader/>
-      ) : !navigator.onLine ? <NoInernet/> : filteredTasks.length == 0 ?
-        <h1 className="flex w-full h-72 justify-center items-center text-4xl text-black font-bold  ">
-          " No Tasks "
+        <TasksLoader />
+      ) : !navigator.onLine ? (
+        <NoInernet />
+      ) : filteredTasks.length == 0 ? (
+        <h1 className="flex w-full h-72 justify-center items-center text-2xl sm:text-4xl text-black font-bold  ">
+          " No such tasks  "
         </h1>
-       : (
+      ) : (
         <div className="flex flex-col w-full items-center gap-6 p-4 overflow-auto">
-          {tasks?.map((task) => (
-            <TaskCard task={task} />
+          {filteredTasks?.map((task) => (
+            <TaskCard task={task} key={task.id} />
           ))}
 
-          <div className=" flex w-full h-40 sm:h-20 items-center justify-evenly">
+
+      {/*----------------------------------------------------------------- Botton LEFT-RIGHT Buttons Div ------------------------------------------------------------ */}
+          {/* <div className=" flex w-full h-40 sm:h-20 items-center justify-evenly">
             <button title="prev" className="btn">
               <FaChevronLeft size={28} />
             </button>
@@ -99,10 +114,10 @@ function Home() {
             <button title="next" className="btn">
               <FaChevronRight size={28} />
             </button>
-          </div>
+          </div> */}
         </div>
       )}
-      
+
       {addTaskModalVisible ? (
         <div>
           <TaskInfoModal

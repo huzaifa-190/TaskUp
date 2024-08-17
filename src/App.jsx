@@ -15,46 +15,44 @@ const db = getDatabase(app);
 import { ToDoProvider, useToDoContext } from "./contexts/ToDoContext";
 import useFirebaseDatabase from "./Hooks/FirebaseHooks";
 
+// ------------------------------------------------------------------------- MAIN FUNCTION -----------------------------------------------------------------
 function App() {
-  const { upDateDoc,deleteDoc, writeData, tasks, setTasks, fetchingData, writingData } =
-    useFirebaseDatabase();
+  // Getting methods and data from useFirebaseDatabase Custom Hook
+  const {
+    upDateDoc,
+    deleteDoc,
+    toggleCompleted,
+    writeData,
+    tasks,
+    setTasks,
+    fetchingData,
+    writingData,
+  } = useFirebaseDatabase();
 
+  // ------------------------------------------------------------------------- METHODS FOR CONTEXT -------------------------------------------------------------
   const AddTask = async (task) => {
-    // setTasks((prev) => [{ id: Date.now, ...task }, ...prev]);
     await writeData(task);
-    // toast("Task added successfully !", { autoClose: 1500 });
   };
 
-  const RemoveTask = ({id,docName}) => {
-    console.log("Removing task ...");
-    // setTasks((prev) => prev.filter((prevTask) => prevTask.id !== id));
-    deleteDoc(id,docName)
+  const RemoveTask = ({ id, docName }) => {
+    deleteDoc(id, docName);
   };
 
   const UpdateTask = ({ id, docName, task }) => {
-    // setTasks((prev) =>
-    //   prev.map((prevTask) => (prevTask.id === id ? task : prevTask))
-    // );
     upDateDoc(id, docName, task);
-  };
-  const toggleComplete = (id) => {
-    // setTasks((prev)=> prev.map(prevTask => prevTask.id === id ? prevTask.completed=!prevTask.completed : prevTask))
+    toast.success("Task Updated !",{autoClose:1000});
 
-    setTasks((prev) =>
-      prev.map((prevTask) =>
-        prevTask.id === id
-          ? { ...prevTask, completed: !prevTask.completed }
-          : prevTask
-      )
-    );
   };
 
-  useEffect(() => {}, []);
+  const toggleComplete = ({ id, docName, task }) => {
+    const toggledTask = { ...task, completed: !task.completed };
+    // console.log("This is the toggled task that will be updated on check/uncheck", toggledTask);
+    toggleCompleted(id, docName, toggledTask);
+    // toast.success("Task Updated ",{autoClose:1000});
 
-  useEffect(() => {
-    // localStorage.setItem("toDos", JSON.stringify(tasks));
-  }, []);
+  };
 
+  // ------------------------------------------------------------------------- RETURN -------------------------------------------------------------
   return (
     <ToDoProvider
       value={{
@@ -68,7 +66,6 @@ function App() {
         writingData,
       }}
     >
-      {/* <TaskInfoModal /> */}
       <Home />
       <ToastContainer />
       {/* <SignUp /> */}

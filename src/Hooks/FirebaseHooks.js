@@ -20,7 +20,6 @@ export default function useFirebaseDatabase () {
       setWritingData(true);
       const newDocRef = push(ref(db, "Tasks"));
       await set(newDocRef, task);
-      toast.success("Data set successfully to RealTime DB");
       setWritingData(false);
     } catch (error) {
       setError(error);
@@ -49,7 +48,20 @@ export default function useFirebaseDatabase () {
       setWritingData(true);
       const newDocRef =(ref(db,docName+'/'+id));
       await set(newDocRef, task);
-      toast.success("Task Updated Successfully");
+      setWritingData(false);
+    } catch (error) {
+      setError(error);
+      toast.error(`Failed!--> ${error.message}`);
+      setWritingData(false);
+    }
+  };
+  
+  // ---------------------------------------------------------------- TOGGLE COMPLETED METHOD ---------------------------------------------------------------
+  const toggleCompleted  = async (id,docName,task) => {
+    try {
+      setWritingData(true);
+      const newDocRef =(ref(db,docName+'/'+id));
+      await set(newDocRef, task);
       setWritingData(false);
     } catch (error) {
       setError(error);
@@ -135,6 +147,7 @@ export default function useFirebaseDatabase () {
         setTasks,
         fetchingData,
         writingData,
+        toggleCompleted,
         error,
         writeData,
         upDateDoc,
