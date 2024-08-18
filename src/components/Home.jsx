@@ -43,12 +43,12 @@ function Home() {
   // );
 
   return (
-    <div className="flex-col h-screen w-screen items-center justify-center py-4 px-4 sm:px-10">
+    <div className="flex-col h-screen w-screen items-center justify-center py-4 px-4 sm:px-10 ">
       {/* TOP Header  */}
       <Header />
       {/* Email Heading For Smaller Screen Sizes */}
-      <div className="hidden sm:hidden w-full items-center justify-end gap-4 px-4">
-        <h2 className="sm:text-xl font-mono text-gray-600">huzaifa190@gmail.com</h2>
+      <div className="flex sm:hidden w-full pb-16  sm:pb-2 pt-1 items-center justify-end gap-4 px-4">
+        <h2 className="text-sm sm:text-xl font- text-gray-600">huzaifa190@gmail.com</h2>
       </div>      
       {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
       <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4">
@@ -99,7 +99,7 @@ function Home() {
           " No such tasks  "
         </h1>
       ) : (
-        <div className="flex flex-col w-full items-center gap-6 p-4 overflow-auto">
+        <div className="flex flex-col w-full items-center gap-6 p-4 overflow-auto ">
           {filteredTasks?.map((task) => (
             <TaskCard task={task} key={task.id} />
           ))}

@@ -4,7 +4,7 @@ import { MdDarkMode } from "react-icons/md";
 
 export default function Header() {
   return (
-    <div className="flex py-2 w-ful ">
+    <div className="flex w-full ">
     {/* Left Div in Header containing Logo */}
     <button
       className="flex items-center gap-1 btn"
@@ -18,7 +18,7 @@ export default function Header() {
 
     {/* Right Div in Header containing email and avatar */}
     <div className="flex flex-wrap-reverse ml-auto items-center justify-end px-4 gap-5 sm:gap-8">
-      <h2 className="flex sm:flex text-sm sm:text-xl font- text-gray-600">huzaifa190@gmail.com</h2>
+      <h2 className="hidden sm:flex text-sm sm:text-xl font- text-gray-600">huzaifa190@gmail.com</h2>
       <button className="btn">
         <MdDarkMode size={28} title="dark mode" />
       </button>

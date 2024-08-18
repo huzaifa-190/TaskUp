@@ -24,12 +24,12 @@ function TaskCard({ task }) {
   return (
     <div
       key={task.id}
-      className={`flex w-full h-16 items-center text-black rounded-md shadow-lg bg-slate-100 
+      className={`flex w-full h-16 items-center text-black rounded-xl shadow-lg bg-transparent
     `}
     >
       {/* // ----------------------------------------------------------------------------- LEFT BOX FOR CHECK-BOX & TITLE -------------------------------------------------------------------  */}
       <div
-        className={`flex items-center gap-3 h-full w-[50%] md:w-[45%] px-4 ${
+        className={`flex items-center gap-3 h-full w-[50%] md:w-[45%] px-4 rounded-l-xl ${
           task.completed ? "completedTask" : " bg-slate-100 "
         } `}
       >
@@ -45,9 +45,7 @@ function TaskCard({ task }) {
 
         <button
           onClick={() => setViewTaskModalVisible(true)}
-          className={`btn textEllipsis text-sm sm:text-md  ${
-            task.completed ? "opacity-80" : " bg-slate-100 "
-          }  `}
+          className={`btn textEllipsis text-sm sm:text-md `}
         >
           {task.title}
         </button>
@@ -55,7 +53,7 @@ function TaskCard({ task }) {
 
       {/* ----------------------------------------------------------------------------------  RIGHT BOX FOR OPTIONS ----------------------------------------------------------------------- */}
       <div
-        className={`flex items-center justify-end gap-2 sm:gap-5 h-full w-[55%] px-4 ${
+        className={`flex items-center justify-end gap-2 sm:gap-5 h-full w-[55%] px-4 rounded-r-xl ${
           task.completed ? "completedTask" : " bg-slate-100 "
         } `}
       >
