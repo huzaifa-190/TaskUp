@@ -19,11 +19,11 @@ export default function Header() {
     event.preventDefault();
     try {
       const user = await logOut();
-      toast("Signed Out !", { autoClose: 1500 });
+      // toast("Signed Out !", { autoClose: 1500 });
       navigate("/sign-in");
-       // Clear history entries beyond the current page
-       window.history.pushState(null, "", window.location.href);
-       window.onpopstate = () => window.history.go(1);
+      // Clear history entries beyond the current page
+      window.history.pushState(null, "", window.location.href);
+      window.onpopstate = () => window.history.go(1);
     } catch (error) {
       toast.error("Error signing out: ", error, { autoClose: 1500 });
     } finally {
@@ -34,15 +34,14 @@ export default function Header() {
     setShowConfirmationModal(true);
   };
   return (
-    <div className="flex flex-col w-full px-2 sm:px-10">
-
+    <div className="flex flex-col w-full px-2 sm:px-10 ">
       <div className="flex w-full  h-16 sm:h-24 ">
         {/* Left Div in Header containing Logo */}
         <button
           className="flex items-center gap-1 btn"
           onClick={() => location.reload()}
         >
-          <h1 className="flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 p-4 rounded-full bg-lightPurp text-white border-lightPurp border-2 sm:text-lg font-bold">
+          <h1 className="inner-white-shadow flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 p-4 rounded-full bg-purple-800 text-white border-purple-200 border-2   text-sm sm:text-lg font-bold">
             Task
           </h1>
           <h1 className="text-md text-gray-700 sm:text-xl font-bold">Up</h1>
@@ -53,13 +52,17 @@ export default function Header() {
           <h2 className="flex sm:flex text-sm sm:text-lg font- text-gray-600">
             {currentUser && currentUser.email}
           </h2>
-          <button className="btn" title="dark mode" >
+          <button className="btn" title="dark mode">
             <MdDarkMode size={28} color="#333432" />
           </button>
           {/* <MdOutlineLightMode size={28} title="light mode" /> */}
           {currentUser && (
-            <button className="btn hidden sm:flex" title="sign-out" onClick={() => onSignOut()}>
-              <PiSignOutBold size={26} color="#333432"/>
+            <button
+              className="btn hidden sm:flex"
+              title="sign-out"
+              onClick={() => onSignOut()}
+            >
+              <PiSignOutBold size={26} color="#333432" />
             </button>
           )}
 
@@ -71,19 +74,17 @@ export default function Header() {
             />
           )}
 
-        {/* Email Heading For Smaller Screen Sizes */}
+          {/* LogOut button For Smaller Screen Sizes */}
         </div>
       </div>
-      <div className="flex sm:hidden w-full pb-16  sm:pb-2 pt-1 items-center justify-end gap-4 px-4 ">
+      {currentUser && (
+        <div className="flex sm:hidden w-full   pb-16   sm:pb-2 pt-1 items-center justify-end gap-4 px-4 ">
           {/* <h2 className="text-sm sm:text-xl font- text-gray-600">huzaifa190@gmail.com</h2> */}
-          {currentUser && (
-            <button className="btn" title="sign-out" onClick={() => onSignOut()}>
-              <PiSignOutBold size={26} color="#333432"/>
-            </button>
-          )}
-        </div>   
+          <button className="btn" title="sign-out" onClick={() => onSignOut()}>
+            <PiSignOutBold size={26} color="#333432" />
+          </button>
+        </div>
+      )}
     </div>
-
-    
   );
 }

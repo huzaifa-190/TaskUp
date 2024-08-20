@@ -8,7 +8,6 @@ import { useToDoContext } from "../contexts/ToDoContext";
 import TaskInfoModal from "./TaskInfoModal";
 
 // ------------------------------------------------------------------------------ MAIN FUNCTION ----------------------------------------------------------------
-// ------------------------------------------------------------------------------ MAIN FUNCTION ----------------------------------------------------------------
 function TaskCard({ task }) {
   const { tasks, UpdateTask, RemoveTask, toggleComplete, AddTask } =
     useToDoContext();
@@ -57,7 +56,7 @@ function TaskCard({ task }) {
         } `}
       >
         <button
-          onClick={() => RemoveTask({ id: task.id, docName: "Tasks" })}
+          onClick={() => RemoveTask(task.id, "Tasks" )}
           className={`btn `}
           title="remove"
         >

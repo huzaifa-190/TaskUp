@@ -14,7 +14,7 @@ export default function ConfirmModal({onConfirm,onClose,title='Are you sure to s
         onClick={closeOnBgTap}
         ref={bgRef}
      >
-      <div className="flex flex-col w-[90%]  sm:w-[70%] md:w-[50%] lg:w-[30%] gap-5 items-center justify- rounded-lg bg-white px-3 py-5 ">
+      <div className="flex flex-col w-[90%]  sm:w-[70%] md:w-[50%] lg:w-[30%] gap-5 items-center justify-center rounded-lg bg-white px-2 sm:px-3 pt-2 pb-5  ">
         <button className="btn ml-auto" onClick={onClose}>
             <X color="#d12323" size={28} />
           </button>

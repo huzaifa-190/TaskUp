@@ -12,13 +12,13 @@ import { Analytics } from "@vercel/analytics/react";
 
 function Layout() {
   return (
-    <>
+    <div className="flex flex-col h-screen">
       <Analytics />
       <Header />
       <Outlet />
       <ToastContainer />
       {/* <Footer /> */}
-    </>
+    </div>
   );
 }
 

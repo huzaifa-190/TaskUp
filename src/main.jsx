@@ -85,12 +85,12 @@ function Main() {
     deleteDoc(id, docName);
   };
 
-  const UpdateTask = (id, docName, task) => {
+  const UpdateTask = ({id, docName, task}) => {
     upDateDoc(id, docName, task);
     toast.success("Task Updated!", { autoClose: 1000 });
   };
 
-  const toggleComplete = (id, docName, task) => {
+  const toggleComplete = ({id, docName, task}) => {
     const toggledTask = { ...task, completed: !task.completed };
     toggleCompleted(id, docName, toggledTask);
   };

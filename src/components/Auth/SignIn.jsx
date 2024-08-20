@@ -5,12 +5,15 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 import useAuth from "../../Hooks/useAuth";
 import { IoEllipseSharp } from "react-icons/io5";
+import { IoMdEye } from "react-icons/io";
+import { IoMdEyeOff } from "react-icons/io";
 
 function SignUp() {
   const navigate = useNavigate();
   const { signIn, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordShown, setPasswordShown] = useState(false)
   const [formErrors, setFormErrors] = useState({
     email: false,
     password: false,
@@ -68,43 +71,56 @@ function SignUp() {
 
   // ---------------------------------------------------- RETURN -----------------------------------------------
   return (
-    <div className="flex-col h-full w-screen items-center justify-center py-4  sm:px-10 overflow-x-hidden">
-      <div className="flex flex-col items-center justify-center h-full w-full gap-5 ">
+    <div className="flex-1 flex-col h-full w-screen items-center justify-center py-4 mt-10  sm:px-10 overflow-x-hidden">
+      <div className="flex flex-col items-center sm:justify-center h-full w-full gap-5 ">
         <h1 className="text-4xl font-bold text-black mb-4">Sign In !</h1>
-        <input
-          type="text"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setFormErrors({
-              ...formErrors,
-              email: false,
-            });
-          }}
-          placeholder="Email"
-          className={`input-fields focus textEllipsis 
-            ${formErrors.email ? " requiredField " : ""}`}
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            setFormErrors({
-              ...formErrors,
-              password: false,
-            });
-          }}
-          placeholder="password"
-          className={`input-fields focus textEllipsis 
-            ${formErrors.password ? " requiredField " : ""}`}
-        />
+        <div
+          className={`input-field-container flex items-center focus  ${
+            formErrors.email ? "requiredField" : ""
+          }`}
+        >
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setFormErrors({
+                ...formErrors,
+                email: false,
+              });
+            }}
+            placeholder="Email"
+            className={` input-fields  textEllipsis `}
+          />
+        </div>
+        <div
+          className={`input-field-container flex items-center  ${
+            formErrors.password ? "requiredField" : ""
+          }`}
+        >
+          <input
+            type={passwordShown ? "text" : "password"}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setFormErrors({
+                ...formErrors,
+                password: false,
+              });
+            }}
+            placeholder="password"
+            className={`input-fields textEllipsis `}
+          />
+          <button className="btn" onClick={()=>setPasswordShown(!passwordShown)}>
+            {passwordShown ? <IoMdEyeOff size={28}/> : <IoMdEye size={28} />}
+          </button>
+        </div>
 
         {/* ---------------------------------------- SUBMIT BUTTON --------------------------------------------- */}
 
         <button
           disabled={loading}
-          className={`btn bg-purple-800 rounded-md text-white w-60 sm:w-72 py-4 ${
+          className={`btn bg-purple-800 rounded-md text-white w-72 sm:w-72 py-4 ${
             loading ? "opacity-60 cursor-not-allowed" : "opacity-100"
           }`}
           onClick={onSubmit}
@@ -120,7 +136,7 @@ function SignUp() {
             "Sign In"
           )}
         </button>
-        <h1 className="mt-10">
+        <h1 className="mt-5">
           Don't have an account ?
           <button
             className="font-bold ml-2 btn "

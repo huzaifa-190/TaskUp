@@ -82,15 +82,16 @@ function TaskInfoModal({
         if (view.toLowerCase() == "create") {
           AddTask(task);
           console.log("Form submitted:", title, "   ", tag, "   ", tagColor);
-          onClose();
+          // onClose();
           toast.success("Task created ",{autoClose:1000});
-          
         } else {
           // *************************If view prop is editable then submiting form for updating
-          // console.log("Task to be written after updating ==> ", task);
           UpdateTask({ id, docName: "Tasks", task });
-          onClose();
+          // onClose();
+          console.log("Task to be written after updating ==> ", task);
+          // toast.success("Task updated ",{autoClose:1000});
         }
+        onClose(); // Close modal after the operation
       } else {
         toast("Chek your internet");
       }
