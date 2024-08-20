@@ -7,7 +7,7 @@ import app from '../DataBase/FirebaseConfig';
 const db = getDatabase(app);
 
 
-export default function useFirebaseDatabase () {
+export default function useFireStore () {
   const [tasks, setTasks] = useState([]);
   const [fetchingData, setFetchingData] = useState(false);
   const [writingData, setWritingData] = useState(false);

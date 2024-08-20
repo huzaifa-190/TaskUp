@@ -44,8 +44,6 @@ function Home() {
 
   return (
     <div className="flex-col h-screen w-screen items-center justify-center py-4 px-4 sm:px-10 ">
-      {/* TOP Header  */}
-      <Header />
       {/* Email Heading For Smaller Screen Sizes */}
       <div className="flex sm:hidden w-full pb-16  sm:pb-2 pt-1 items-center justify-end gap-4 px-4">
         <h2 className="text-sm sm:text-xl font- text-gray-600">huzaifa190@gmail.com</h2>
