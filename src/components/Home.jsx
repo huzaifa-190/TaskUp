@@ -4,6 +4,8 @@ import { IoIosAddCircle } from "react-icons/io";
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa6";
 import { IoFilter } from "react-icons/io5";
+import { PiSignOutBold } from "react-icons/pi";
+
 
 import TaskCard from "./TaskCard";
 import TaskInfoModal from "./TaskInfoModal";
@@ -11,11 +13,13 @@ import FilterDropDown from "./FilterDropDown";
 import Header from "./Header";
 import NoInernet from "./NoInernet";
 import TasksLoader from "./TasksLoader";
+import useAuth from "../Hooks/useAuth";
 
 import { useToDoContext } from "../contexts/ToDoContext";
 
 function Home() {
   const { tasks, fetchingData } = useToDoContext();
+  const {currentUser} = useAuth()
   const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentFilterTag, setCurrentFilterTag] = useState("All");
@@ -43,11 +47,8 @@ function Home() {
   // );
 
   return (
-    <div className="flex-col h-screen w-screen items-center justify-center py-4 px-4 sm:px-10 ">
-      {/* Email Heading For Smaller Screen Sizes */}
-      <div className="flex sm:hidden w-full pb-16  sm:pb-2 pt-1 items-center justify-end gap-4 px-4">
-        <h2 className="text-sm sm:text-xl font- text-gray-600">huzaifa190@gmail.com</h2>
-      </div>      
+    <div className="flex-col h-screen w-screen items-center justify-center px-2 sm:px-10 ">
+        
       {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
       <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4">
         {/* FILTER DROPDOWN FOR >= LG-Screen SIZES*/}
@@ -97,7 +98,7 @@ function Home() {
           " No such tasks  "
         </h1>
       ) : (
-        <div className="flex flex-col w-full items-center gap-6 p-4 overflow-auto ">
+        <div className="flex flex-col w-full items-center gap-6 p-4  ">
           {filteredTasks?.map((task) => (
             <TaskCard task={task} key={task.id} />
           ))}

@@ -121,7 +121,7 @@ function TaskInfoModal({
             {heading}
           </h1>
           <button className="btn ml-auto" onClick={onClose}>
-            <X color="red" size={28} />
+            <X color="#d12323" size={28} />
           </button>
         </div>
 
@@ -206,7 +206,7 @@ function TaskInfoModal({
         {/* ----------------------------------------------------- SUBMIT BUTTON ------------------------------------------------------  */}
         {view.toLowerCase() != "readonly" ? (
           <button
-            className="btn w-52 sm:w-60 lg:w-72 p-4 mt-2 text-white  bg-lightPurp opacity-90 rounded-md mx-auto bg-opacity-65 focus:outline-none"
+            className="btn w-52 sm:w-60 lg:w-72 p-4 mt-2 text-white  bg-lightPurp  rounded-md mx-auto bg-opacity-65 focus:outline-none"
             type="submit"
             onClick={() => handleSubmit()}
           >

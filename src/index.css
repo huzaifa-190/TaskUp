@@ -17,7 +17,7 @@
     @apply h-10  w-[350px] text-gray-600 bg-white border-[2px] p-3  focus:outline-0 focus:outline-lightPurp
   }
   .btn{
-    @apply active:opacity-50 transition-all
+    @apply active:opacity-50 transition-all  
  }
   .labels{
     @apply text-black sm:text-lg my-2
@@ -25,14 +25,21 @@
   .modalInputFields{
     @apply  text-gray-400 text-sm h-11 sm:h-14 sm:w-72 px-3 py-2 mb-3 bg-slate-100 rounded-md focus:outline-none  
   }
+  .input-fields{
+    @apply  text-gray-400 text-sm h-11 sm:h-12 sm:w-72 px-3 py-2 mb-3 bg-slate-100 rounded-md focus:outline-none  
+
+  }
   .requiredFieldLabel{
     @apply text-sm ml-auto  text-red-500 transition-all ease-linear duration-500
+  }
+  .modal-btn{
+    @apply py-2 w-28 rounded-lg border-[1px] hover:bg-slate-100
   }
 }
 
 :root {
   overflow-x: hidden;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;

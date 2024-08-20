@@ -1,53 +1,86 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { React, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { MdDarkMode } from "react-icons/md";
 import { PiSignOutBold } from "react-icons/pi";
 
-import useAuth from '../Hooks/useAuth';
+import useAuth from "../Hooks/useAuth";
+import useFireStore from "../Hooks/useFireStore";
+import ConfirmModal from "./ConfirmModal";
 export default function Header() {
-  const {logOut,currentUser,loading} = useAuth()
-  const navigate = useNavigate()
-  
-  const onSignOut =async ()=>{
-    try{
+  const { logOut, currentUser, loading } = useAuth();
+  const navigate = useNavigate();
+
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  // --------------------------------------------------------------- METHODS ----------------------------------------------------------------
+  const signOut = async () => {
+    event.preventDefault();
+    try {
       const user = await logOut();
-      toast("User signed out successfully");
-      navigate('/sign-in')
+      toast("Signed Out !", { autoClose: 1500 });
+      navigate("/sign-in");
+    } catch (error) {
+      toast.error("Error signing out: ", error, { autoClose: 1500 });
+    } finally {
+      setShowConfirmationModal(false);
     }
-    catch(error){
-      toast.error("Error signing out: ", error);
-    }
-  
-  }
+  };
+  const onSignOut = async () => {
+    setShowConfirmationModal(true);
+  };
   return (
-    <div className="flex w-full h-24 px-4 sm:px-10">
-    {/* Left Div in Header containing Logo */}
-    <button
-      className="flex items-center gap-1 btn"
-      onClick={() => location.reload()}
-    >
-      <h1 className="flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 p-4 rounded-full bg-lightPurp text-white border-lightPurp border-2 sm:text-lg font-bold">
-        Task
-      </h1>
-      <h1 className="text-md text-gray-700 sm:text-xl font-bold">Up</h1>
-    </button>
+    <div className="flex flex-col w-full px-2 sm:px-10">
 
-    {/* Right Div in Header containing email and avatar */}
-    <div className="flex flex-wrap-reverse ml-auto items-center justify-end px-4 gap-5 sm:gap-8">
-      <h2 className="hidden sm:flex text-sm sm:text-xl font- text-gray-600">huzaifa190@gmail.com</h2>
-      <button className="btn">
-        <MdDarkMode size={28} title="dark mode" />
-      </button>
-      {currentUser &&
+      <div className="flex w-full h-16 sm:h-24 ">
+        {/* Left Div in Header containing Logo */}
+        <button
+          className="flex items-center gap-1 btn"
+          onClick={() => location.reload()}
+        >
+          <h1 className="flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 p-4 rounded-full bg-lightPurp text-white border-lightPurp border-2 sm:text-lg font-bold">
+            Task
+          </h1>
+          <h1 className="text-md text-gray-700 sm:text-xl font-bold">Up</h1>
+        </button>
 
-      <button className="btn" onClick={()=>onSignOut()}>
-        <PiSignOutBold size={26}  />     
-      </button>
-}
-      {/* <MdOutlineLightMode size={28} title="light mode" /> */}
+        {/* Right Div in Header containing email and avatar */}
+        <div className="flex flex-wrap-reverse ml-auto items-center justify-end px-4 gap-5 sm:gap-5   ">
+          <h2 className="flex sm:flex text-sm sm:text-lg font- text-gray-600">
+            {currentUser && currentUser.email}
+          </h2>
+          <button className="btn" title="dark mode" >
+            <MdDarkMode size={28} color="#333432" />
+          </button>
+          {/* <MdOutlineLightMode size={28} title="light mode" /> */}
+          {currentUser && (
+            <button className="btn hidden sm:flex" title="sign-out" onClick={() => onSignOut()}>
+              <PiSignOutBold size={26} color="#333432"/>
+            </button>
+          )}
+
+          {/* ------------------------------------------------------ OVERLAY MODAL ------------------------------------------------- */}
+          {showConfirmationModal && (
+            <ConfirmModal
+              onConfirm={signOut}
+              onClose={() => setShowConfirmationModal(false)}
+            />
+          )}
+
+        {/* Email Heading For Smaller Screen Sizes */}
+        </div>
+      </div>
+      <div className="flex sm:hidden w-full pb-16  sm:pb-2 pt-1 items-center justify-end gap-4 px-4 ">
+          {/* <h2 className="text-sm sm:text-xl font- text-gray-600">huzaifa190@gmail.com</h2> */}
+          {currentUser && (
+            <button className="btn" title="sign-out" onClick={() => onSignOut()}>
+              <PiSignOutBold size={26} color="#333432"/>
+            </button>
+          )}
+        </div>   
     </div>
-  </div>
-  )
+
+    
+  );
 }

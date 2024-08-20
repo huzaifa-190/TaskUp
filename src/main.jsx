@@ -7,8 +7,8 @@ import {
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify"; 
-import "react-toastify/dist/ReactToastify.css"; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // ---------------------------------------------------- Components Imports ------------------------------------------
 import LayOut from "./components/Layout/LayOut.jsx";
@@ -20,6 +20,7 @@ import Auth from "./components/Auth/Auth.jsx";
 import { ToDoProvider } from "./contexts/ToDoContext";
 import useFireStore from "./Hooks/useFireStore";
 
+// --------------------------------------------------------------------------- SETTING ROUTES FOR ROUTER -----------------------------------------------------------------
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -27,13 +28,21 @@ const router = createBrowserRouter(
         <Route path="" element={<Index />} />
         <Route path="sign-up" element={<SignUp />} />
         <Route path="sign-in" element={<SignIn />} />
-        <Route path="home" element={<Auth><Home /></Auth>} />
+        <Route
+          path="home"
+          element={
+            <Auth>
+              <Home />
+            </Auth>
+          }
+        />
         {/* <Route path="home" element={<Home />} /> */}
       </Route>
     </>
   )
 );
 
+// ------------------------------------------------------ NO need of contexts for ToDo but I did just for practice here --------------------------------------------------------
 function Main() {
   const {
     upDateDoc,
@@ -83,6 +92,7 @@ function Main() {
     </ToDoProvider>
   );
 }
+// ------------------------------------------------------------------ SERVING MAIN --------------------------------------------------------------
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
