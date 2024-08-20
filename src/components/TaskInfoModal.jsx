@@ -131,7 +131,7 @@ function TaskInfoModal({
         </label>
         <input
           readOnly={view.toLowerCase() == "readonly"}
-          autoFocus={view.toLowerCase() != "readonly"}
+          // autoFocus={view.toLowerCase() != "readonly"}
           title={view.toUpperCase()}
           type="text"
           id="titleField"

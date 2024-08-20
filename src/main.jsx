@@ -7,7 +7,7 @@ import {
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // ---------------------------------------------------- Components Imports ------------------------------------------
@@ -16,7 +16,8 @@ import Index from "./components/Index.jsx";
 import SignIn from "./components/Auth/SignIn.jsx";
 import SignUp from "./components/Auth/SignUp.jsx";
 import Home from "./components/Home.jsx";
-import Auth from "./components/Auth/Auth.jsx";
+import AuthProtectedRoute from "./components/Auth/AuthProtectedRoute.jsx";
+import HomeProtectedRoute from "./components/Home/HomeProtectedRoute.jsx";
 import { ToDoProvider } from "./contexts/ToDoContext";
 import useFireStore from "./Hooks/useFireStore";
 
@@ -25,24 +26,45 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<LayOut />}>
-        <Route path="" element={<Index />} />
-        <Route path="sign-up" element={<SignUp />} />
-        <Route path="sign-in" element={<SignIn />} />
+        <Route
+          index
+          element={
+            <HomeProtectedRoute>
+              <Index />
+            </HomeProtectedRoute>
+          }
+        />
+        <Route
+          path="sign-up"
+          element={
+            <HomeProtectedRoute>
+              <SignUp />
+            </HomeProtectedRoute>
+          }
+        />
+        <Route
+          path="sign-in"
+          element={
+            <HomeProtectedRoute>
+              <SignIn />
+            </HomeProtectedRoute>
+          }
+        />
         <Route
           path="home"
           element={
-            <Auth>
+            <AuthProtectedRoute>
               <Home />
-            </Auth>
+            </AuthProtectedRoute>
           }
         />
-        {/* <Route path="home" element={<Home />} /> */}
       </Route>
     </>
   )
 );
 
-// ------------------------------------------------------ NO need of contexts for ToDo but I did just for practice here --------------------------------------------------------
+// ------------------------------------------------------ MAIN COMPONENT --------------------------------------------------------
+
 function Main() {
   const {
     upDateDoc,
@@ -59,22 +81,22 @@ function Main() {
     await writeData(task);
   };
 
-  const RemoveTask = ({ id, docName }) => {
+  const RemoveTask = (id, docName) => {
     deleteDoc(id, docName);
   };
 
-  const UpdateTask = ({ id, docName, task }) => {
+  const UpdateTask = (id, docName, task) => {
     upDateDoc(id, docName, task);
     toast.success("Task Updated!", { autoClose: 1000 });
   };
 
-  const toggleComplete = ({ id, docName, task }) => {
+  const toggleComplete = (id, docName, task) => {
     const toggledTask = { ...task, completed: !task.completed };
     toggleCompleted(id, docName, toggledTask);
   };
 
   return (
-    // ------------------------------------------------------ Wraping entire Router with ToDo Providers ----------------------------------------
+    // Wrap the router with ToDo Provider
     <ToDoProvider
       value={{
         tasks,
@@ -92,8 +114,8 @@ function Main() {
     </ToDoProvider>
   );
 }
-// ------------------------------------------------------------------ SERVING MAIN --------------------------------------------------------------
 
+// ------------------------------------------------------------------ RENDER MAIN --------------------------------------------------------------
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Main />

@@ -21,6 +21,9 @@ export default function Header() {
       const user = await logOut();
       toast("Signed Out !", { autoClose: 1500 });
       navigate("/sign-in");
+       // Clear history entries beyond the current page
+       window.history.pushState(null, "", window.location.href);
+       window.onpopstate = () => window.history.go(1);
     } catch (error) {
       toast.error("Error signing out: ", error, { autoClose: 1500 });
     } finally {
@@ -33,7 +36,7 @@ export default function Header() {
   return (
     <div className="flex flex-col w-full px-2 sm:px-10">
 
-      <div className="flex w-full h-16 sm:h-24 ">
+      <div className="flex w-full  h-16 sm:h-24 ">
         {/* Left Div in Header containing Logo */}
         <button
           className="flex items-center gap-1 btn"

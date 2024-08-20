@@ -49,9 +49,11 @@ function SignUp() {
     }
   };
 
+  // ---------------------------------------------------- RETURN -----------------------------------------------
+
   return (
-    <div className="flex-col h-screen w-screen items-center justify-center py-4  sm:px-10">
-      <div className="flex flex-col items-center justify-center h-[85%] w-full gap-5 ">
+    <div className="flex-col w-screen items-center justify-center py-4  sm:px-10 ">
+      <div className="flex flex-col items-center justify-center h-full w-full gap-5">
         <h1 className="text-4xl font-bold text-black mb-4">SignUp !</h1>
         <input
           type="text"
@@ -84,7 +86,7 @@ function SignUp() {
 
         <button
           disabled={loading}
-          className={`btn bg-purple-800 rounded-md text-white sm:w-72 py-4 ${
+          className={`btn bg-purple-800 rounded-md text-white w-60 sm:w-72 py-4 ${
             loading ? "opacity-60 cursor-not-allowed" : "opacity-100"
           }`}
           onClick={onSubmit}
@@ -100,7 +102,7 @@ function SignUp() {
             "Sign Up"
           )}
         </button>
-        <h1>
+        <h1 className="mt-10">
           Already have an account ?
           <button
             className="font-bold ml-2 btn "
