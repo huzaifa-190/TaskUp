@@ -40,7 +40,7 @@
     @apply py-2 w-28 rounded-lg border-[1px] hover:bg-slate-100
   }
   .scroll-to-top-btn{
-    @apply fixed right-[48%] bottom-4 flex items-center justify-center align-middle h-10 w-10 rounded-full z-10 shadow-xl shadow-purple-200
+    @apply fixed right-[44%] sm:right-[48%] bottom-4 flex items-center justify-center align-middle h-10 w-10 rounded-full z-10 shadow-xl shadow-purple-200
       bg-yellow-400 hover:-translate-y-2 transition-all ease-in duration-150
   }
 }
