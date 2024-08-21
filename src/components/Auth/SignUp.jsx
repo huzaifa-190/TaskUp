@@ -54,7 +54,7 @@ function SignUp() {
   // ---------------------------------------------------- RETURN ------------------------------------------------------
 
   return (
-    <div className="flex-1 flex-col w-screen items-center justify-center py-4 mt-10 sm:px-10">
+    <div className="flex-1 flex-col w-screen items-center justify-center py-4 mt-10 sm:px-10 animate-slidetoleftfade">
       <div className="flex flex-col items-center sm:justify-center h-full w-full gap-5">
         <h1 className="text-4xl font-bold text-black mb-4">Sign Up!</h1>
 

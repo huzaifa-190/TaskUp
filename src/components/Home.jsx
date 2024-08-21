@@ -1,11 +1,11 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 
 import { IoIosAddCircle } from "react-icons/io";
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa6";
 import { IoFilter } from "react-icons/io5";
 import { PiSignOutBold } from "react-icons/pi";
-
+import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
 
 import TaskCard from "./TaskCard";
 import TaskInfoModal from "./TaskInfoModal";
@@ -14,15 +14,17 @@ import Header from "./Header";
 import NoInernet from "./NoInernet";
 import TasksLoader from "./TasksLoader";
 import useAuth from "../Hooks/useAuth";
+import useFireStore from "../Hooks/useFireStore";
 
 import { useToDoContext } from "../contexts/ToDoContext";
 
 function Home() {
   const { tasks, fetchingData } = useToDoContext();
-  const {currentUser} = useAuth()
+  const { currentUser } = useAuth();
   const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentFilterTag, setCurrentFilterTag] = useState("All");
+  const [isScrollToTopBtnVisible, setIsScrollToTopBtnVisible] = useState(false);
 
   // Filtered tasks based on search query
   const filteredTasks = tasks?.filter((task) => {
@@ -30,27 +32,50 @@ function Home() {
       return task.title.toLowerCase().includes(searchQuery.toLowerCase());
     } else if (currentFilterTag?.toLowerCase() == "pending") {
       return (
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) && !task.completed
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !task.completed
       );
     } else if (currentFilterTag?.toLowerCase() == "done") {
       return (
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) && task.completed
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        task.completed
       );
     } else {
-      console.log("Filtering Tasks ...",task)
+      console.log("Filtering Tasks ...", task);
       return (
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) && currentFilterTag?.toLowerCase() == task?.tag?.toLowerCase()
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        currentFilterTag?.toLowerCase() == task?.tag?.toLowerCase()
       );
     }
   });
-  // task.tagColor == "#11fd0d"
-  // );
 
+  // Show button when page is scrolled down
+  const toggleVisibility = () => {
+    if (window.scrollY > 90) {
+      setIsScrollToTopBtnVisible(true);
+    } else {
+      setIsScrollToTopBtnVisible(false);
+    }
+  };
+
+  // Scroll to top when button is clicked
+
+  const scrollToTop = async () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+    return () => {
+      window.removeEventListener("scroll", toggleVisibility);
+    };
+  }, []);
   return (
     <div className="flex-col h-screen w-screen items-center justify-center px-2 sm:px-10 ">
-        
       {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
-      <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4">
+      <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4 animate-slidetoleftfade">
         {/* FILTER DROPDOWN FOR >= LG-Screen SIZES*/}
         <button className="btn mr-auto hidden sm:flex">
           <FilterDropDown
@@ -75,13 +100,13 @@ function Home() {
             onClick={() => setAddTaskModalVisible(true)}
             className="btn "
           >
-            <IoIosAddCircle size={45} color="#8f40c4" />
+            <IoIosAddCircle size={45} color="#6B21A8" />
           </button>
         </div>
       </div>
 
       {/*----------------------------------------------------------------- FILTER DROP-DOWN Div FOR SM-Screen SIZES------------------------------------------------------------ */}
-      <button className="btn flex sm:hidden px-4">
+      <button className="btn flex sm:hidden px-4 animate-slidetoleftfade">
         <FilterDropDown
           tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
           selectedTag={currentFilterTag}
@@ -95,16 +120,28 @@ function Home() {
         <NoInernet />
       ) : filteredTasks.length == 0 ? (
         <h1 className="flex w-full h-72 justify-center items-center text-2xl sm:text-4xl text-black font-bold  ">
-          " No such tasks  "
+          " No such tasks "
         </h1>
       ) : (
-        <div className="flex flex-col w-full items-center gap-6 p-4  ">
-          {filteredTasks?.map((task) => (
-            <TaskCard task={task} key={task.id} />
-          ))}
+        <div className="flex flex-col w-full items-center gap-6 p-4  animate-slideupfade">
+          {filteredTasks
+            ?.slice()
+            .reverse()
+            .map((task) => (
+              <TaskCard task={task} key={task.id} />
+            ))}
 
+          {/*----------------------------------------------------------------- Scroll To Top Button ------------------------------------------------------------ */}
+          {isScrollToTopBtnVisible ? (
+            <button
+              className="scroll-to-top-btn animate-bounceUp"
+              onClick={() => scrollToTop()}
+            >
+              <MdOutlineKeyboardDoubleArrowUp size={30} color="white" />
+            </button>
+          ) : null}
 
-      {/*----------------------------------------------------------------- Botton LEFT-RIGHT Buttons Div ------------------------------------------------------------ */}
+          {/*----------------------------------------------------------------- Botton LEFT-RIGHT Buttons Div ------------------------------------------------------------ */}
           {/* <div className=" flex w-full h-40 sm:h-20 items-center justify-evenly">
             <button title="prev" className="btn">
               <FaChevronLeft size={28} />

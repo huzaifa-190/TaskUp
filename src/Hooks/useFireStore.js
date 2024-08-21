@@ -3,12 +3,13 @@ import { getDatabase, ref, set, push, get ,onValue,remove} from 'firebase/databa
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import app from '../DataBase/FirebaseConfig';
-
+import useAuth from './useAuth';
 const db = getDatabase(app);
 
 
 export default function useFireStore () {
   const [tasks, setTasks] = useState([]);
+  const {currentUser} = useAuth();
   const [fetchingData, setFetchingData] = useState(false);
   const [writingData, setWritingData] = useState(false);
   const [updatingData, setUpdatingData] = useState(false);
@@ -48,10 +49,11 @@ export default function useFireStore () {
       setWritingData(true);
       const newDocRef =(ref(db,docName+'/'+id));
       await set(newDocRef, task);
-      setWritingData(false);
     } catch (error) {
       setError(error);
       toast.error(`Failed!--> ${error.message}`);
+    }
+    finally {
       setWritingData(false);
     }
   };
@@ -62,10 +64,11 @@ export default function useFireStore () {
       setWritingData(true);
       const newDocRef =(ref(db,docName+'/'+id));
       await set(newDocRef, task);
-      setWritingData(false);
     } catch (error) {
       setError(error);
       toast.error(`Failed! ${error.message}`);
+    }
+    finally{
       setWritingData(false);
     }
   };
@@ -104,6 +107,7 @@ export default function useFireStore () {
     
     // ---------------------------------------------------------------- READ METHOD ----------------------------------------------------------------
     const readData = (docName) => {
+
       try {
         setFetchingData(true);
         const docRef = ref(db, docName);
@@ -132,13 +136,18 @@ export default function useFireStore () {
           toast.error(`Failed! ${error.message}`);
           setFetchingData(false);
           setTasks([])
-      }};
+      }
+    }
+    
+      
 
       if(!navigator.onLine){
         toast("No Internet",{autoClose:1000})
-      }else{
+      }
+      else{
         readData("Tasks")
       }
+      
   },[])
  
 

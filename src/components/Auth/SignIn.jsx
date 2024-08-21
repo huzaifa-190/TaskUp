@@ -37,9 +37,9 @@ function SignUp() {
           const user = await signIn(email, password);
           setEmail("");
           setPassword("");
-          toast.success(`Signed In Successfully with : ${user.email}`, {
-            autoClose: 1500,
-          });
+          // toast.success(`Signed In Successfully with : ${user.email}`, {
+          //   autoClose: 1500,
+          // });
           navigate("/home", { replace: true });
            // Clear history entries beyond the current page
           window.history.pushState(null, "", window.location.href);
@@ -71,7 +71,7 @@ function SignUp() {
 
   // ---------------------------------------------------- RETURN -----------------------------------------------
   return (
-    <div className="flex-1 flex-col h-full w-screen items-center justify-center py-4 mt-10  sm:px-10 overflow-x-hidden">
+    <div className="flex-1 flex-col h-full w-screen items-center justify-center py-4 mt-10  sm:px-10 overflow-x-hidden animate-slidetorightfade">
       <div className="flex flex-col items-center sm:justify-center h-full w-full gap-5 ">
         <h1 className="text-4xl font-bold text-black mb-4">Sign In !</h1>
         <div

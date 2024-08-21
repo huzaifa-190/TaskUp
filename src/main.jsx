@@ -7,10 +7,10 @@ import {
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer,toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ---------------------------------------------------- Components Imports ------------------------------------------
+// Components Imports
 import LayOut from "./components/Layout/LayOut.jsx";
 import Index from "./components/Index.jsx";
 import SignIn from "./components/Auth/SignIn.jsx";
@@ -21,7 +21,7 @@ import HomeProtectedRoute from "./components/Home/HomeProtectedRoute.jsx";
 import { ToDoProvider } from "./contexts/ToDoContext";
 import useFireStore from "./Hooks/useFireStore";
 
-// --------------------------------------------------------------------------- SETTING ROUTES FOR ROUTER -----------------------------------------------------------------
+// Setting Routes for Router
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -54,7 +54,10 @@ const router = createBrowserRouter(
           path="home"
           element={
             <AuthProtectedRoute>
-              <Home />
+              {/* Wrap only the Home route with ToDoProvider */}
+              <ToDoWrapper>
+                <Home />
+              </ToDoWrapper>
             </AuthProtectedRoute>
           }
         />
@@ -63,9 +66,8 @@ const router = createBrowserRouter(
   )
 );
 
-// ------------------------------------------------------ MAIN COMPONENT --------------------------------------------------------
-
-function Main() {
+// Helper component to wrap Home route with ToDoProvider
+function ToDoWrapper({ children }) {
   const {
     upDateDoc,
     deleteDoc,
@@ -87,6 +89,7 @@ function Main() {
 
   const UpdateTask = ({id, docName, task}) => {
     upDateDoc(id, docName, task);
+    console.log("In update task afteer .... ")
     toast.success("Task Updated!", { autoClose: 1000 });
   };
 
@@ -96,7 +99,6 @@ function Main() {
   };
 
   return (
-    // Wrap the router with ToDo Provider
     <ToDoProvider
       value={{
         tasks,
@@ -109,15 +111,23 @@ function Main() {
         writingData,
       }}
     >
-      <RouterProvider router={router} />
-      <ToastContainer />
+      {children}
     </ToDoProvider>
   );
 }
 
-// ------------------------------------------------------------------ RENDER MAIN --------------------------------------------------------------
+// Render Main
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Main />
   </StrictMode>
 );
+
+function Main() {
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </>
+  );
+}

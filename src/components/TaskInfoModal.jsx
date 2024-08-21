@@ -114,7 +114,7 @@ function TaskInfoModal({
     >
       {/* ----------------------------------------------------- MODAL FORM ------------------------------------------------------  */}
       <form
-        className="flex flex-col w-[80%]  sm:w-[70%] md:w-[60%] lg:w-[50%]  p-8 sm:p-8  rounded-3xl bg-white z-10 "
+        className="flex flex-col w-[80%]  sm:w-[70%] md:w-[60%] lg:w-[50%]  p-8 sm:p-8  rounded-3xl bg-white z-10 animate-openModal"
         // onSubmit={handleSubmit()}
       >
         <div className="flex flex-row mb-4 items-center ">

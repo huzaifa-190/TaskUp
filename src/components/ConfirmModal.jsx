@@ -20,7 +20,7 @@ export default function ConfirmModal({onConfirm,onClose,title='Are you sure to s
           </button>
         <h1 className="md:text-lg text-slate-800">{title}</h1>
         <div className="flex gap-5">
-            <button className="btn modal-btn" onClick={onClose}>No</button>
+            <button className="btn modal-btn animate-pulse" onClick={onClose}>No</button>
             <button className="btn modal-btn" onClick={onConfirm}>Yes</button>
         </div>
       </div>
