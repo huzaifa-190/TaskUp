@@ -21,6 +21,7 @@ import { useToDoContext } from "../contexts/ToDoContext";
 function Home() {
   const { tasks, fetchingData } = useToDoContext();
   const { currentUser } = useAuth();
+  const { tags } = useFireStore();
   const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentFilterTag, setCurrentFilterTag] = useState("All");
@@ -74,17 +75,19 @@ function Home() {
   }, []);
   return (
     <div className="flex-col h-screen w-screen items-center justify-center px-2 sm:px-10 ">
+        <h1>{tags[1]?.title}</h1>
+      
       {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
       <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4 animate-slidetoleftfade">
         {/* FILTER DROPDOWN FOR >= LG-Screen SIZES*/}
         <button className="btn mr-auto hidden sm:flex">
           <FilterDropDown
-            tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
+            // tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
+            tagOptions={tags.map(tag => tag.title)}
             selectedTag={currentFilterTag}
             onTagChange={(value) => setCurrentFilterTag(value)}
           />
         </button>
-
         <div className="sm:mr-auto flex w-full justify-center items-center gap-4">
           <input
             type="text"
@@ -108,10 +111,11 @@ function Home() {
       {/*----------------------------------------------------------------- FILTER DROP-DOWN Div FOR SM-Screen SIZES------------------------------------------------------------ */}
       <button className="btn flex sm:hidden px-4 animate-slidetoleftfade">
         <FilterDropDown
+          // tagOptions={[...tags,"Pending", "Done"]}
           tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
           selectedTag={currentFilterTag}
           onTagChange={(value) => setCurrentFilterTag(value)}
-        />
+          />
       </button>
       {/*----------------------------------------------------------------- Tasks Table Div ------------------------------------------------------------ */}
       {fetchingData ? (

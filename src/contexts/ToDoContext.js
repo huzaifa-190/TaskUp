@@ -2,6 +2,7 @@ import {createContext,useContext} from 'react';
 
 export const ToDoContext = createContext({
     tasks: [],
+    tags: [],
     AddTask    : (title)=>{},
     RemoveTask : (id)=>{},
     UpdateTask   : ({id,title})=>{},

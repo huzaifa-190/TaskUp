@@ -9,20 +9,32 @@ const db = getDatabase(app);
 
 export default function useFireStore () {
   const [tasks, setTasks] = useState([]);
+  const [tags, setTags] = useState([]);
   const {currentUser} = useAuth();
   const [fetchingData, setFetchingData] = useState(false);
   const [writingData, setWritingData] = useState(false);
   const [updatingData, setUpdatingData] = useState(false);
   const [error, setError] = useState(null);
   
+  // ---------------------------------------------------------------- WRITE TAGS METHOD ----------------------------------------------------------------
+  const writeTags = async (tag) => {
+    try {
+      setWritingData(true);
+      const newDocRef = ref(db, `Tasks/${currentUser?.uid}/tags/`);
+      const newTaskRef = push(newDocRef); // Generates a unique key for the new task
+      await set(newTaskRef, tag);
+      setWritingData(false);
+    } catch (error) {
+      setError(error);
+      toast.error(`Failed! ${error.message}`);
+      setWritingData(false);
+    }
+  };
   // ---------------------------------------------------------------- WRITE DOC METHOD ----------------------------------------------------------------
   const writeData = async (task) => {
     try {
       setWritingData(true);
-      // const newDocRef = push(ref(db, "Tasks/"+currentUser?.uid));
-      // const newDocRef = push(ref(db, "Tasks/"));
-      // Reference to the user's tasks root
-      const newDocRef = ref(db, `Tasks/${currentUser?.uid}`);
+      const newDocRef = ref(db, `Tasks/${currentUser?.uid}/tasks`);
       const newTaskRef = push(newDocRef); // Generates a unique key for the new task
       await set(newTaskRef, task);
       setWritingData(false);
@@ -37,7 +49,7 @@ export default function useFireStore () {
   const deleteDoc = async (id,docName)=>{
     try {
       setWritingData(true);
-      const docRef =(ref(db,docName+'/'+currentUser.uid+'/'+id));
+      const docRef =(ref(db,docName+'/'+currentUser.uid+'/tasks/'+id));
       await remove(docRef)
       toast.success("Task deleted Successfully",{autoClose:1000});
       setWritingData(false);
@@ -51,7 +63,7 @@ export default function useFireStore () {
   const upDateDoc  = async (id,docName,task) => {
     try {
       setWritingData(true);
-      const newDocRef =(ref(db,docName+'/'+currentUser.uid+'/'+id));
+      const newDocRef =(ref(db,docName+'/'+currentUser.uid+'/tasks/'+id));
       await set(newDocRef, task);
     } catch (error) {
       setError(error);
@@ -66,7 +78,7 @@ export default function useFireStore () {
   const toggleCompleted  = async (id,docName,task) => {
     try {
       setWritingData(true);
-      const newDocRef =(ref(db,docName+'/'+id));
+      const newDocRef =(ref(db,docName+'/'+currentUser.uid+'/tasks/'+id));
       await set(newDocRef, task);
     } catch (error) {
       setError(error);
@@ -110,37 +122,77 @@ export default function useFireStore () {
   useEffect(()=>{
      // Ensure that currentUser is available before making a request
   if (!currentUser || !currentUser.uid) {
-    console.log("User is not authenticated");
     return;
   }
-    // ---------------------------------------------------------------- READ METHOD ----------------------------------------------------------------
+    // ---------------------------------------------------------------- READ Tasks METHOD ----------------------------------------------------------------
     const readData = (docName) => {
-
+      
       try {
         setFetchingData(true);
         // const docRef = ref(db,docName);
         // const docRef = ref(db, docName+'/'+currentUser?.uid+'/');
-        const docRef = ref(db,`${docName}/${currentUser.uid}/`);
+        const docRef = ref(db,`${docName}/${currentUser.uid}/tasks/`);
         
         console.log("Reference path:", docRef.toString());        
-         console.log("Inside readData mehtod ");
-         onValue(docRef, (snapshot) => {
+        //  console.log("Inside readData mehtod ");
+        onValue(docRef, (snapshot) => {
            if (snapshot.exists()) {
              
              const docs = snapshot.val()
-             console.log("snaphot.vals =>  ",docs);
+             console.log("TAGS ==> snaphot.vals =>  ",docs);
             const docIds = Object.keys(docs);
             const data = docIds.map(id => {return{...docs[id],id:id}})
 
-            console.log("Data from db in readData inside HOok ==>",data);
+            console.log("Tasks data from db in readData inside HOok ==>",data);
             setTasks(data);
             setFetchingData(false);
             // return data;
           } else {
-            setError(new Error("No snapshot exists"));
-            toast.error(`Failed - snapshot does't exist`);
+            // setError(new Error("No snapshot exists"));
+            // toast.error(`Failed - snapshot does't exist`);
             setFetchingData(false);
             setTasks([])
+            // return data
+          }}
+        )
+  
+      } catch (error) {
+          setError(error);
+          // toast.error(`Failed! ${error.message}`);
+          setFetchingData(false);
+          setTasks([])
+      }
+    }
+
+        // --------------------------------------------------------------- - READ Tags METHOD ----------------------------------------------------------------
+
+    const readTags = (docName) => {
+
+      try {
+        setFetchingData(true);
+       
+        const docRef = ref(db,`${docName}/${currentUser.uid}/tags/`);
+        
+        console.log("Reference path:", docRef.toString());        
+        //  console.log("Inside readTags mehtod ");
+         onValue(docRef, (snapshot) => {
+           if (snapshot.exists()) {
+             
+             const docs = snapshot.val()
+             console.log("Tags ==> snaphot.vals =>  ",docs);
+             const docIds = Object.keys(docs);
+             console.log("Tags ==> docIds =>  ",docIds);
+            const data = docIds.map(id => {return{...docs[id],id:id}})
+
+            console.log("Tags data from db in readData inside HOok ==>",data);
+            setTags(data);
+            setFetchingData(false);
+            // return data;
+          } else {
+            // setError(new Error("No snapshot exists"));
+            // toast.error(`Failed - snapshot does't exist`);
+            setFetchingData(false);
+            setTags([])
             // return data
           }}
         )
@@ -160,6 +212,7 @@ export default function useFireStore () {
       }
       else{
         readData("Tasks")
+        readTags("Tasks")
       }
       
   },[currentUser])
@@ -167,11 +220,13 @@ export default function useFireStore () {
 
     return {
         tasks,
+        tags,
         setTasks,
         fetchingData,
         writingData,
         toggleCompleted,
         error,
+        writeTags,
         writeData,
         upDateDoc,
         deleteDoc,

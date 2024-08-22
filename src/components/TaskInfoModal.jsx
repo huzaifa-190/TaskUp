@@ -3,7 +3,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { X } from "lucide-react";
 
 import { useToDoContext } from "../contexts/ToDoContext";
-
+import useFireStore from "../Hooks/useFireStore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -31,12 +31,13 @@ function TaskInfoModal({
     RemoveTask,
     toggleComplete,
     AddTask,
+    WriteTags,
     writingData,
   } = useToDoContext();
-
-  const [title, setTitle] = useState(task && task.title || '');
+const {tags} = useFireStore()
+  const [title, setTitle] = useState((task && task.title) || "");
   // const [title, setTitle] = useState(`${id? id : ''}`);
-  const [tag, setTag] = useState(task && task.tag || '');
+  const [tag, setTag] = useState((task && task.tag) || "");
   const [tagColor, setTagColor] = useState(
     (task && task.tagColor) || "#62ff1f"
   );
@@ -77,13 +78,23 @@ function TaskInfoModal({
           title: title,
           completed: false,
         };
-        
+        const tagg = { title:tag }
         // ************************************************ IF View prop = create , So It should call AddTask method to create a new task
         if (view.toLowerCase() == "create") {
           AddTask(task);
+          console.log("Added task Now adding Tag ...");
+           // Check if the tag is already present
+        const tagTitles = tags.map(tg => tg.title) ;
+        console.log("TagTitles in existing ",tagTitles)
+        const tagExists = tagTitles.includes(tagg.title);
+
+        if (!tagExists) {
+          // toast.error(`TagTitles =>> ${tagTitles}`);
+          WriteTags(tagg);
           console.log("Form submitted:", title, "   ", tag, "   ", tagColor);
           // onClose();
-          toast.success("Task created ",{autoClose:1000});
+          toast.success("Task created ", { autoClose: 1000 });
+        }
         } else {
           // *************************If view prop is editable then submiting form for updating
           UpdateTask({ id, docName: "Tasks", task });

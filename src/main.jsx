@@ -73,12 +73,16 @@ function ToDoWrapper({ children }) {
     deleteDoc,
     toggleCompleted,
     writeData,
+    writeTags,
     tasks,
     setTasks,
     fetchingData,
     writingData,
   } = useFireStore();
 
+  const WriteTags = async (tag) => {
+    await writeTags(tag);
+  };
   const AddTask = async (task) => {
     await writeData(task);
   };
@@ -104,6 +108,7 @@ function ToDoWrapper({ children }) {
         tasks,
         setTasks,
         AddTask,
+        WriteTags,
         UpdateTask,
         RemoveTask,
         toggleComplete,

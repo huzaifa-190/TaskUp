@@ -50,8 +50,9 @@ export default function Header() {
 
         {/* Right Div in Header containing email and avatar */}
         <div className="flex flex-wrap-reverse ml-auto items-center justify-end px-4 gap-5 sm:gap-5   ">
-          <h2 className="flex sm:flex text-sm sm:text-lg font- text-gray-600">
-            {currentUser && currentUser.email} -- {currentUser && currentUser.uid}
+          <h2 className="flex sm:flex text-sm sm:text-lg font-semibold text-gray-600">
+            {currentUser && currentUser.email} 
+            {/* --- {currentUser && currentUser.uid} */}
           </h2>
           <button className="btn" title="dark mode">
             <MdDarkMode size={28} color="#333432" />
