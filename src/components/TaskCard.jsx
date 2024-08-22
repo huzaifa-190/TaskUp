@@ -37,7 +37,7 @@ function TaskCard({ task }) {
           id="isCompletedCheckBox"
           checked={task.completed}
           onChange={() => toggleComplete({id:task.id,docName:"Tasks",task})}
-          className={`text-lightPurp h-8 `}
+          className={`text-lightPurp h-8 cursor-pointer`}
           size={28}
         />
 
