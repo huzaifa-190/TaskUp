@@ -28,6 +28,7 @@ function Home() {
 
   // Filtered tasks based on search query
   const filteredTasks = tasks?.filter((task) => {
+    console.log("Filtering Tasks ...", task);
     if (currentFilterTag?.toLowerCase() == "all") {
       return task.title.toLowerCase().includes(searchQuery.toLowerCase());
     } else if (currentFilterTag?.toLowerCase() == "pending") {
@@ -41,7 +42,6 @@ function Home() {
         task.completed
       );
     } else {
-      console.log("Filtering Tasks ...", task);
       return (
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
         currentFilterTag?.toLowerCase() == task?.tag?.toLowerCase()

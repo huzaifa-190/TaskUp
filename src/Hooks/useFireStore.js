@@ -19,8 +19,12 @@ export default function useFireStore () {
   const writeData = async (task) => {
     try {
       setWritingData(true);
-      const newDocRef = push(ref(db, "Tasks"));
-      await set(newDocRef, task);
+      // const newDocRef = push(ref(db, "Tasks/"+currentUser?.uid));
+      // const newDocRef = push(ref(db, "Tasks/"));
+      // Reference to the user's tasks root
+      const newDocRef = ref(db, `Tasks/${currentUser?.uid}`);
+      const newTaskRef = push(newDocRef); // Generates a unique key for the new task
+      await set(newTaskRef, task);
       setWritingData(false);
     } catch (error) {
       setError(error);
@@ -33,7 +37,7 @@ export default function useFireStore () {
   const deleteDoc = async (id,docName)=>{
     try {
       setWritingData(true);
-      const docRef =(ref(db,docName+'/'+id));
+      const docRef =(ref(db,docName+'/'+currentUser.uid+'/'+id));
       await remove(docRef)
       toast.success("Task deleted Successfully",{autoClose:1000});
       setWritingData(false);
@@ -47,7 +51,7 @@ export default function useFireStore () {
   const upDateDoc  = async (id,docName,task) => {
     try {
       setWritingData(true);
-      const newDocRef =(ref(db,docName+'/'+id));
+      const newDocRef =(ref(db,docName+'/'+currentUser.uid+'/'+id));
       await set(newDocRef, task);
     } catch (error) {
       setError(error);
@@ -104,18 +108,27 @@ export default function useFireStore () {
   
 
   useEffect(()=>{
-    
+     // Ensure that currentUser is available before making a request
+  if (!currentUser || !currentUser.uid) {
+    console.log("User is not authenticated");
+    return;
+  }
     // ---------------------------------------------------------------- READ METHOD ----------------------------------------------------------------
     const readData = (docName) => {
 
       try {
         setFetchingData(true);
-        const docRef = ref(db, docName);
-       
-        onValue(docRef, (snapshot) => {
-          if (snapshot.exists()) {
-
-            const docs = snapshot.val()
+        // const docRef = ref(db,docName);
+        // const docRef = ref(db, docName+'/'+currentUser?.uid+'/');
+        const docRef = ref(db,`${docName}/${currentUser.uid}/`);
+        
+        console.log("Reference path:", docRef.toString());        
+         console.log("Inside readData mehtod ");
+         onValue(docRef, (snapshot) => {
+           if (snapshot.exists()) {
+             
+             const docs = snapshot.val()
+             console.log("snaphot.vals =>  ",docs);
             const docIds = Object.keys(docs);
             const data = docIds.map(id => {return{...docs[id],id:id}})
 
@@ -125,6 +138,7 @@ export default function useFireStore () {
             // return data;
           } else {
             setError(new Error("No snapshot exists"));
+            toast.error(`Failed - snapshot does't exist`);
             setFetchingData(false);
             setTasks([])
             // return data
@@ -148,7 +162,7 @@ export default function useFireStore () {
         readData("Tasks")
       }
       
-  },[])
+  },[currentUser])
  
 
     return {
