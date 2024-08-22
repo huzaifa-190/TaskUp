@@ -32,6 +32,12 @@ export default function   FilterDropDown({
             {tag}
           </option>
         ))}
+        <option value="Pending" className="flex gap-4 text-sm bg-white ">
+          Pending
+        </option>
+        <option value="Completed" className="flex gap-4 text-sm bg-white ">
+          Completed
+        </option>
       </select>
     </div>
   );

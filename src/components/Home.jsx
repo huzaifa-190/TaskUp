@@ -37,7 +37,7 @@ function Home() {
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
         !task.completed
       );
-    } else if (currentFilterTag?.toLowerCase() == "done") {
+    } else if (currentFilterTag?.toLowerCase() == "completed") {
       return (
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
         task.completed
@@ -75,8 +75,6 @@ function Home() {
   }, []);
   return (
     <div className="flex-col h-screen w-screen items-center justify-center px-2 sm:px-10 ">
-        <h1>{tags[1]?.title}</h1>
-      
       {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
       <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4 animate-slidetoleftfade">
         {/* FILTER DROPDOWN FOR >= LG-Screen SIZES*/}
@@ -112,7 +110,8 @@ function Home() {
       <button className="btn flex sm:hidden px-4 animate-slidetoleftfade">
         <FilterDropDown
           // tagOptions={[...tags,"Pending", "Done"]}
-          tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
+          // tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
+          tagOptions={tags.map(tag => tag.title)}
           selectedTag={currentFilterTag}
           onTagChange={(value) => setCurrentFilterTag(value)}
           />

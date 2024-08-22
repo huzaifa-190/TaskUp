@@ -20,9 +20,6 @@ function TaskInfoModal({
   task = {},
   onClose,
   id = "",
-  titlee = "",
-  tagg = "",
-  taggColor = "",
   view = "",
 }) {
   const {
@@ -78,19 +75,19 @@ const {tags} = useFireStore()
           title: title,
           completed: false,
         };
-        const tagg = { title:tag }
+        const newTag = { title:tag ,tagColor:tagColor}
         // ************************************************ IF View prop = create , So It should call AddTask method to create a new task
         if (view.toLowerCase() == "create") {
           AddTask(task);
           console.log("Added task Now adding Tag ...");
            // Check if the tag is already present
-        const tagTitles = tags.map(tg => tg.title) ;
+        const tagTitles = tags.map(tg => tg.title.toLowerCase()) ;
         console.log("TagTitles in existing ",tagTitles)
-        const tagExists = tagTitles.includes(tagg.title);
+        const tagExists = tagTitles.includes(newTag.title.toLowerCase());
 
         if (!tagExists) {
           // toast.error(`TagTitles =>> ${tagTitles}`);
-          WriteTags(tagg);
+          WriteTags(newTag);
           console.log("Form submitted:", title, "   ", tag, "   ", tagColor);
           // onClose();
           toast.success("Task created ", { autoClose: 1000 });
