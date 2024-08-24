@@ -8,7 +8,7 @@ export default function NoInernet() {
         <IoCloudOfflineSharp size={32}/>
             You're Offline  
         </h1>
-        <button className='btn p-3 bg-gray-600 text-white rounded-lg text-md font-mono' onClick={()=>location.reload()}>
+        <button className='btn p-3 bg-gray-600 text-white rounded-lg text-md font-mono hover:shadow-2xl' onClick={()=>location.reload()}>
             Refresh
         </button>
     </div>

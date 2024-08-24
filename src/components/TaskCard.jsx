@@ -5,12 +5,14 @@ import { SlOptionsVertical } from "react-icons/sl";
 import { PiTagChevronFill } from "react-icons/pi";
 
 import { useToDoContext } from "../contexts/ToDoContext";
+import useFireStore from "../Hooks/useFireStore";
 import TaskInfoModal from "./TaskInfoModal";
 
 // ------------------------------------------------------------------------------ MAIN FUNCTION ----------------------------------------------------------------
 function TaskCard({ task }) {
   const { tasks, UpdateTask, RemoveTask, toggleComplete, AddTask } =
     useToDoContext();
+  const {tags} = useFireStore()
   const [viewTaskModalVisible, setViewTaskModalVisible] = useState(false);
   const [editTaskModalVisible, setEditTaskModalVisible] = useState(false);
   const timee = new Date(2024, 7, 16);
@@ -23,7 +25,7 @@ function TaskCard({ task }) {
   return (
     <div
       key={task.id}
-      className={`flex w-full h-16 items-center text-black rounded-xl shadow-lg bg-transparent`}
+      className={`flex w-full h-16 items-center text-black rounded-xl shadow-lg bg-transparent  `}
     >
       {/* // ----------------------------------------------------------------------------- LEFT BOX FOR CHECK-BOX & TITLE -------------------------------------------------------------------  */}
       <div
@@ -80,7 +82,7 @@ function TaskCard({ task }) {
         >
           <SlOptionsVertical size={20} className="sm:size-6"  color="#262626" />
         </button>
-        <PiTagChevronFill size={25} className="sm:size-8"  color={task.tagColor} />
+        <PiTagChevronFill size={25} className="sm:size-8"   color={tags.find(tg => tg.title.toLowerCase().trim() === task.tag.toLowerCase().trim())?.tagColor }/>
       </div>
 
       {/* ---------------------------------------------------------------------------------- EDIT TASK MODAL ----------------------------------------------------------------------- */}

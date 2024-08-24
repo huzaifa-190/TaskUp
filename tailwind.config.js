@@ -82,7 +82,7 @@ export default {
 
     animation: {
       vibrate: 'vibrate 0.5s ease-in ',
-      slideupfade: 'slide-up-fade 1s ease-out',
+      slideupfade: 'slide-up-fade 1s ease-out   ',
       slidetoleftfade:'slide-to-left-fade 0.7s ease-out',
       menuslidetoleftfade:'slide-to-left-fade 0.5s ease-out',
       slidetorightfade:'slide-to-right-fade 0.7s ease-out ',

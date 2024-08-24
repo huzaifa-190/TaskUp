@@ -30,6 +30,22 @@ export default function useFireStore () {
       setWritingData(false);
     }
   };
+  // ---------------------------------------------------------------- UPDATE TAGS METHOD ----------------------------------------------------------------
+  const updateTags  = async (id,docName,tag) => {
+    try {
+      setWritingData(true);
+      const newDocRef =(ref(db,docName+'/'+currentUser.uid+'/tags/'+id));
+      await set(newDocRef, tag);
+    } catch (error) {
+      setError(error);
+      toast.error(`Failed!--> ${error.message}`);
+    }
+    finally {
+      setWritingData(false);
+    }
+  };
+
+
   // ---------------------------------------------------------------- WRITE DOC METHOD ----------------------------------------------------------------
   const writeData = async (task) => {
     try {
@@ -221,6 +237,7 @@ export default function useFireStore () {
     return {
         tasks,
         tags,
+        updateTags,
         setTasks,
         fetchingData,
         writingData,

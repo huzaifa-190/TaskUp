@@ -99,7 +99,7 @@ function SignUp() {
           />
           <button
             type="button"
-            className="btn ml-2"
+            className="btn flex items-center justify-center px-2"
             onClick={() => setPasswordShown(!passwordShown)}
           >
             {passwordShown ? <IoMdEyeOff size={28} /> : <IoMdEye size={28} />}

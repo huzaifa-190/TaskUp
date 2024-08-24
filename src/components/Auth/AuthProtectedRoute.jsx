@@ -20,7 +20,8 @@ function AuthProtectedRoute({ children }) {
 
   const showToast = debounce(() => {
     if (!toastId.current) {
-      toastId.current = toast.warn("Sign In to proceed ...");
+      // toastId.current = toast.warn("Sign In to proceed ...");
+      console.log("Sign In to proceed ...")
     }
   }, 300);
 

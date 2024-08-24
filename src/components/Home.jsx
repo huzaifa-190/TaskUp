@@ -6,6 +6,7 @@ import { FaChevronLeft } from "react-icons/fa6";
 import { IoFilter } from "react-icons/io5";
 import { PiSignOutBold } from "react-icons/pi";
 import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
 
 import TaskCard from "./TaskCard";
 import TaskInfoModal from "./TaskInfoModal";
@@ -27,7 +28,7 @@ function Home() {
   const [currentFilterTag, setCurrentFilterTag] = useState("All");
   const [isScrollToTopBtnVisible, setIsScrollToTopBtnVisible] = useState(false);
 
-  // Filtered tasks based on search query
+  // ---------------------------------------------Filtered tasks along with on search query----------------------------------------
   const filteredTasks = tasks?.filter((task) => {
     console.log("Filtering Tasks ...", task);
     if (currentFilterTag?.toLowerCase() == "all") {
@@ -67,26 +68,31 @@ function Home() {
       behavior: "smooth",
     });
   };
+
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
     return () => {
       window.removeEventListener("scroll", toggleVisibility);
     };
   }, []);
+
+    /* -------------------------------------------------------------- RETURN -------------------------------------------------- */
+
   return (
     <div className="flex-col h-screen w-screen items-center justify-center px-2 sm:px-10 ">
-      {/* -------------------------------------------------------------- Search bar div -------------------------------------------------- */}
-      <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4 animate-slidetoleftfade">
+      {/* -------------------------------------------------------------- Search-bar & filter container -------------------------------------------------- */}
+      <div className="flex items-start justify-center gap-4 mt-5 sm:mt-10 mb-6 px-4 animate-slidetoleftfade ">
         {/* FILTER DROPDOWN FOR >= LG-Screen SIZES*/}
-        <button className="btn mr-auto hidden sm:flex">
+        <button className="mr-auto hidden md:flex  ">
           <FilterDropDown
-            // tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
-            tagOptions={tags.map(tag => tag.title)}
+            tagOptions={tags}
             selectedTag={currentFilterTag}
             onTagChange={(value) => setCurrentFilterTag(value)}
           />
         </button>
-        <div className="sm:mr-auto flex w-full justify-center items-center gap-4">
+        <div className="sm:mr-auto flex w-full lg:justify-center items-center gap-4  ">
+          <div className="searchField-container flex items-center justify-center">
+
           <input
             type="text"
             id="searchField"
@@ -94,7 +100,11 @@ function Home() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="searchField mr-auo"
-          />
+            />
+          <button className={`btn animate-openModal ${searchQuery.length > 0 ? "flex" : "hidden"}`} onClick={()=>setSearchQuery('')} title="clear">
+            <RxCross2 size={24} color="grey"/>
+          </button>
+          </div>
 
           <button
             title="Add new task"
@@ -107,14 +117,12 @@ function Home() {
       </div>
 
       {/*----------------------------------------------------------------- FILTER DROP-DOWN Div FOR SM-Screen SIZES------------------------------------------------------------ */}
-      <button className="btn flex sm:hidden px-4 animate-slidetoleftfade">
+      <button className="btn flex md:hidden px-4 animate-slidetoleftfade">
         <FilterDropDown
-          // tagOptions={[...tags,"Pending", "Done"]}
-          // tagOptions={["Work", "Family", "Personal", "Pending", "Done"]}
-          tagOptions={tags.map(tag => tag.title)}
+          tagOptions={tags}
           selectedTag={currentFilterTag}
           onTagChange={(value) => setCurrentFilterTag(value)}
-          />
+        />
       </button>
       {/*----------------------------------------------------------------- Tasks Table Div ------------------------------------------------------------ */}
       {fetchingData ? (

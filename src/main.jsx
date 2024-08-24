@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode,lazy,Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import {
@@ -13,15 +13,18 @@ import "react-toastify/dist/ReactToastify.css";
 // Components Imports
 import LayOut from "./components/Layout/LayOut.jsx";
 import Index from "./components/Index.jsx";
-import SignIn from "./components/Auth/SignIn.jsx";
-import SignUp from "./components/Auth/SignUp.jsx";
-import Home from "./components/Home.jsx";
 import AuthProtectedRoute from "./components/Auth/AuthProtectedRoute.jsx";
 import HomeProtectedRoute from "./components/Home/HomeProtectedRoute.jsx";
+import TasksLoader from "./components/TasksLoader.jsx";
+
 import { ToDoProvider } from "./contexts/ToDoContext";
 import useFireStore from "./Hooks/useFireStore";
 
-// Setting Routes for Router
+const SignUp = lazy(()=>import("./components/Auth/SignUp.jsx"))
+const SignIn = lazy(()=>import("./components/Auth/SignIn.jsx"))
+const Home = lazy(()=>import("./components/Home.jsx"))
+
+//------------------------------------------------------ Setting Routes for Router
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -38,7 +41,9 @@ const router = createBrowserRouter(
           path="sign-up"
           element={
             <HomeProtectedRoute>
+              <Suspense fallback={<><TasksLoader/></>}>
               <SignUp />
+              </Suspense>          
             </HomeProtectedRoute>
           }
         />
@@ -46,7 +51,9 @@ const router = createBrowserRouter(
           path="sign-in"
           element={
             <HomeProtectedRoute>
+              <Suspense fallback={<><TasksLoader/></>}>
               <SignIn />
+              </Suspense>
             </HomeProtectedRoute>
           }
         />
@@ -56,7 +63,9 @@ const router = createBrowserRouter(
             <AuthProtectedRoute>
               {/* Wrap only the Home route with ToDoProvider */}
               <ToDoWrapper>
+              <Suspense fallback={<><TasksLoader/></>}>
                 <Home />
+              </Suspense>
               </ToDoWrapper>
             </AuthProtectedRoute>
           }
@@ -66,7 +75,7 @@ const router = createBrowserRouter(
   )
 );
 
-// Helper component to wrap Home route with ToDoProvider
+// ----------------------------------------------------------Helper component to wrap Home route with ToDoProvider
 function ToDoWrapper({ children }) {
   const {
     upDateDoc,
@@ -74,6 +83,7 @@ function ToDoWrapper({ children }) {
     toggleCompleted,
     writeData,
     writeTags,
+    updateTags,
     tasks,
     setTasks,
     fetchingData,
@@ -82,6 +92,9 @@ function ToDoWrapper({ children }) {
 
   const WriteTags = async (tag) => {
     await writeTags(tag);
+  };
+  const UpdateTags = async (id,docName,tag) => {
+    await updateTags(id,docName,tag);
   };
   const AddTask = async (task) => {
     await writeData(task);
@@ -94,7 +107,7 @@ function ToDoWrapper({ children }) {
   const UpdateTask = ({id, docName, task}) => {
     upDateDoc(id, docName, task);
     console.log("In update task afteer .... ")
-    toast.success("Task Updated!", { autoClose: 1000 });
+    // toast.success("Task Updated!", { autoClose: 1000 }); 
   };
 
   const toggleComplete = ({id, docName, task}) => {
@@ -109,6 +122,7 @@ function ToDoWrapper({ children }) {
         setTasks,
         AddTask,
         WriteTags,
+        UpdateTags,
         UpdateTask,
         RemoveTask,
         toggleComplete,
@@ -121,7 +135,7 @@ function ToDoWrapper({ children }) {
   );
 }
 
-// Render Main
+// --------------------------------------------------------------------------Render Main
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Main />

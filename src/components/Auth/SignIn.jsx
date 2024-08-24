@@ -111,7 +111,7 @@ function SignUp() {
             placeholder="password"
             className={`input-fields textEllipsis `}
           />
-          <button className="btn" onClick={()=>setPasswordShown(!passwordShown)}>
+          <button className="btn flex items-center justify-center px-2" onClick={()=>setPasswordShown(!passwordShown)}>
             {passwordShown ? <IoMdEyeOff size={28}/> : <IoMdEye size={28} />}
           </button>
         </div>
