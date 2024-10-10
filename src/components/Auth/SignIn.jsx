@@ -10,7 +10,7 @@ import { IoMdEyeOff } from "react-icons/io";
 
 function SignUp() {
   const navigate = useNavigate();
-  const { signIn, loading } = useAuth();
+  const { signIn, loading,Google_Auth } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordShown, setPasswordShown] = useState(false)
@@ -67,6 +67,18 @@ function SignUp() {
     } else {
       console.log("form errors i.e empty fields -> ", formErrors);
     }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const user = await Google_Auth()
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        setUser(user); // Store the user info in the state
+      })
+      .catch((error) => {
+        console.error('Error during Google sign-in:', error);
+      });
   };
 
   // ---------------------------------------------------- RETURN -----------------------------------------------
@@ -136,13 +148,47 @@ function SignUp() {
             "Sign In"
           )}
         </button>
+           {/* Separator */}
+      <div className="flex flex-col items-center justify-center w-full max-w-xs my-2">
+        {/* <hr className="w-full border-gray-300" /> */}
+        <span className="px-3 text-gray-500">OR</span>
+        <span className="px-3 text-gray-500">sign in with Google</span>
+        {/* <hr className="w-full border-gray-300" /> */}
+      </div>
+
+
+
+        <button
+          disabled={loading}
+          className={`btn w-72 py-0 ${
+            loading ? "opacity-60" : "opacity-100"
+          }`}
+          onClick={handleGoogleSignIn}
+        >
+          {loading ? (
+            <ClipLoader
+              color={"white"}
+              size={20}
+              aria-label="Signing In ..."
+              data-testid="loader"
+            />
+          ) :  <img
+          src="/google.png" // Path to image in public folder
+          alt="icon"
+          className="w-10 h-10 inline-block mr-2" // Adjust size and spacing
+        />
+        }
+        </button>
+
+
+
         <h1 className="mt-5">
           Don't have an account ?
           <button
             className="font-bold ml-2 btn "
             onClick={() => navigate("/sign-up")}
           >
-            SignUp{" "}
+            SignUp
           </button>
         </h1>
       </div>

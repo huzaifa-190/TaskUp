@@ -76,7 +76,7 @@ function TaskInfoModal({
 
         if (view.toLowerCase() === "create") {
           AddTask(newTask);
-          console.log("Added task, now adding tag...");
+          console.log("Added task, now adding Subject...");
 
           const tagTitles = tags.map((tg) => tg.title.toLowerCase().trim());
           const tagExists = tagTitles.includes(newTag.title);
@@ -90,7 +90,7 @@ function TaskInfoModal({
             );
             if (prevTag && prevTag.tagColor !== newTag.tagColor) {
               UpdateTags(prevTag.id, "Tasks", newTag);
-              toast.success("Task and tag updated", { autoClose: 1000 });
+              // toast.success("Task and Subject updated", { autoClose: 1000 });
             }
           }
         } else {
@@ -166,7 +166,7 @@ function TaskInfoModal({
         )}
 
         <label htmlFor="tagField" className="labels">
-          Tag *
+          Subject *
         </label>
         <input
           list="browsers"
@@ -174,7 +174,7 @@ function TaskInfoModal({
           title={view.toUpperCase()}
           type="text"
           id="tagField"
-          placeholder="work, study, home etc."
+          placeholder="Maths, Englis etc."
           value={tag}
           // required
           onChange={(e) => {
@@ -202,7 +202,7 @@ function TaskInfoModal({
         )}
 
         <label htmlFor="tagColor" className="labels">
-          {view.toLowerCase() === "create" && "Select"} Tag color *
+          {view.toLowerCase() === "create" && "Select"} subject color *
         </label>
         <input
           type="color"

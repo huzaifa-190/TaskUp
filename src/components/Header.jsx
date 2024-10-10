@@ -8,6 +8,7 @@ import { PiSignOutBold } from "react-icons/pi";
 import useAuth from "../Hooks/useAuth";
 import useFireStore from "../Hooks/useFireStore";
 import ConfirmModal from "./ConfirmModal";
+import GenAi from "./GenAi.jsx"
 
 export default function Header() {
   const { logOut, currentUser, loading } = useAuth();
@@ -42,14 +43,18 @@ export default function Header() {
           className="flex items-center gap-1 btn"
           onClick={() => location.reload()}
         >
-          <h1 className="inner-white-shadow flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 p-4 rounded-full bg-purple-800 text-white border-purple-200 border-2   text-sm sm:text-lg font-bold">
-            Task
+          <h1 className="inner-white-shadow flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 p-4 rounded-full bg-purple-800 text-white border-purple-200 border-2   text-sm sm:text-md font-bold">
+            Study
           </h1>
-          <h1 className="text-md text-gray-700 sm:text-xl font-bold">Up</h1>
+          <h1 className="text-md text-gray-700 sm:text-lg font-bold">Mate</h1>
         </button>
 
         {/* Right Div in Header containing email and avatar */}
         <div className="flex flex-wrap-reverse ml-auto items-center justify-end px-4 gap-5 sm:gap-5   ">
+           
+          {/* <GenAi/> */}
+
+
           <h2 className="flex sm:flex text-sm sm:text-lg font-semibold text-gray-600">
             {currentUser && currentUser.email} 
             {/* --- {currentUser && currentUser.uid} */}

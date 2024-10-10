@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from 'firebase/auth';
-import {auth} from "../DataBase/FirebaseConfig"
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, GoogleAuthProvider,
+  signInWithPopup } from 'firebase/auth';
+import {auth,provider} from "../DataBase/FirebaseConfig"
 import { toast } from 'react-toastify';
 
 
@@ -68,7 +69,17 @@ function useAuth() {
       setLoading(false);
     }
   };
+  const Google_Auth = () => {
 
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      setUser(user); // Store the user info in the state
+    })
+    .catch((error) => {
+      console.error('Error during Google sign-in:', error);
+    });
+  }
 
   return {
     currentUser,
@@ -76,6 +87,7 @@ function useAuth() {
     signUp,
     signIn,
     logOut,
+    Google_Auth
   };
 }
 
